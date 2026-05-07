@@ -1,0 +1,596 @@
+// Version: 1.0.0
+type AIDecisionLog__453764565 =
+  {
+    alternativesConsidered : [(Text, Float)];
+    confidenceFactors :
+      {
+        historicalSetupPerformance : Float;
+        liquidity : Float;
+        marketStructure : Float;
+        momentum : Float;
+        regimeConfidence : Float;
+        total : Float;
+        trendAlignment : Float;
+        volatilityQuality : Float
+      };
+    decision : TradeDecision__577316000;
+    decisionCycleId : Nat;
+    executedTradeId : ?Text;
+    executionDetails :
+      ?{
+         executionDelayMs : Nat;
+         feePct : Float;
+         slippagePct : Float;
+         spreadPct : Float
+       };
+    executionStatus : {#Executed; #Failed; #Pending; #Skipped};
+    indicatorValues :
+      {
+        atr : Float;
+        bollingerBandwidth : Float;
+        ema20 : Float;
+        ema50 : Float;
+        macd : Float;
+        rsi : Float
+      };
+    marketSnapshot :
+      {
+        btcDominance : Float;
+        price : Float;
+        volatilityPct : Float;
+        volume24h : Float
+      };
+    multiTimeframeSignals :
+      [{
+         emaAlignment : Bool;
+         macdSignal : {#Bearish; #Bullish; #Cross};
+         rsi : Float;
+         strength : Float;
+         timeframe : Text;
+         trend : {#Bearish; #Bullish; #Neutral}
+       }];
+    noTradeReason : ?Text;
+    skipReason : ?Text
+  };
+type AITrainingState__770988635 =
+  {
+    avgConfidenceScore : Float;
+    confidenceCalibration : Float;
+    confidenceThreshold : Float;
+    consecutiveLosses : Nat;
+    correlationData : [CorrelationData__927646858];
+    lastTrainingUpdate : Int;
+    learningProgress : Float;
+    marketMemory : [StrategyPerformanceByRegime__88160753];
+    noTradeLog : [NoTradeDecision__1053270506];
+    overallWinRate : Float;
+    overtradingCount : Nat;
+    practiceTradesCount : Nat;
+    strategyPerformances :
+      [{
+         avgConfidence : Float;
+         lastUpdated : Int;
+         losses : Nat;
+         strategyMode :
+           {
+             #Defensive;
+             #MeanReversion;
+             #Observation;
+             #Scalping;
+             #TrendFollowing
+           };
+         totalPnl : Float;
+         totalTrades : Nat;
+         winRate : Float;
+         wins : Nat
+       }];
+    totalSessions : Nat
+  };
+type ArenaResult__575651487 =
+  {
+    agentId : Text;
+    avgHoldTime : Int;
+    finalBalance : Float;
+    maxDrawdownPct : Float;
+    performanceByRegime : [RegimeBreakdown__707571886];
+    sharpeRatio : Float;
+    totalReturnPct : Float;
+    tradeCount : Nat;
+    winRate : Float
+  };
+type ArenaSession__43438282 =
+  {
+    completedAt : Int;
+    endDate : Text;
+    initialCapital : Float;
+    results : [ArenaResult__575651487];
+    sessionId : Text;
+    startDate : Text;
+    symbol : Text
+  };
+type BacktestResults__1058841598 =
+  {
+    equityCurve : [EquityPoint__127208498];
+    finalBalance : Float;
+    maxDrawdown : Float;
+    sharpeRatio : ?Float;
+    totalPnlPercent : Float;
+    totalReturn : Float;
+    totalTrades : Nat;
+    trades :
+      [{
+         action : {#Buy; #Hold; #Sell; #Skip};
+         closeTime : Int;
+         decisionId : Text;
+         entryPrice : Float;
+         exitPrice : ?Float;
+         id : Text;
+         openTime : Int;
+         pnl : ?Float;
+         pnlPercent : ?Float;
+         quantity : Float;
+         status : {#Cancelled; #Closed; #Open; #StopLossHit; #TakeProfitHit};
+         stopLoss : Float;
+         symbol : Text;
+         takeProfit : ?Float
+       }];
+    winRate : Float
+  };
+type BacktestSession__71191967 =
+  {
+    endDate : Int;
+    id : Text;
+    initialBalance : Float;
+    name : Text;
+    results : ?BacktestResults__1058841598;
+    startDate : Int;
+    status : BacktestStatus__635170982;
+    symbols : [Text]
+  };
+type BacktestStatus__635170982 = {#Completed; #Failed; #Running};
+type BotConfig__497733849 =
+  {
+    decisionIntervalSecs : Nat;
+    partialExitLevels : [PartialExitLevel__83497635];
+    refreshIntervalSecs : Nat;
+    simulationFidelity : SimulationFidelity__1068954128;
+    startingBalance : Float;
+    tradingMode : TradingMode__804333982;
+    volatilityPositionSizing : Bool
+  };
+type BotState__604828795 =
+  {
+    dataFeedHealthy : Bool;
+    decisionCycleCount : Nat;
+    lastDataFetchAt : ?Nat64;
+    lastDecisionAt : ?Nat64;
+    startedAt : ?Nat64;
+    status : BotStatus__830023098;
+    tradesExecutedCount : Nat;
+    uptimeSeconds : Nat64
+  };
+type BotStatus__830023098 = {#EmergencyStopped; #Paused; #Running; #Stopped};
+type Candle__823835442 =
+  {
+    close : Float;
+    high : Float;
+    low : Float;
+    open : Float;
+    timestamp : Int;
+    volume : Float
+  };
+type ConfidenceFactors__475413898 =
+  {
+    historicalSetupPerformance : Float;
+    liquidity : Float;
+    marketStructure : Float;
+    momentum : Float;
+    regimeConfidence : Float;
+    total : Float;
+    trendAlignment : Float;
+    volatilityQuality : Float
+  };
+type ConfidencePoint__388000762 =
+  {
+    action : Text;
+    asset : Text;
+    confidence : Float;
+    regime : Text;
+    timestamp : Nat64
+  };
+type CorrelationData__927646858 =
+  {btcCorrelation : Float; lastUpdated : Int; symbol : Text};
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type EquityPoint__127208498 = {timestamp : Int; value : Float};
+type EquitySnapshot__655578696 =
+  {
+    cash : Float;
+    dailyPnLPct : Float;
+    equity : Float;
+    positionValue : Float;
+    realizedPnLToday : Float;
+    timestamp : Nat64;
+    totalPnLPct : Float;
+    unrealizedPnL : Float
+  };
+type ExchangeConnection__662870294 =
+  {
+    connected : Bool;
+    encryptedApiKey : Blob;
+    encryptedApiSecret : Blob;
+    exchangeId : Text;
+    lastTestTimestamp : Int;
+    phase : Nat
+  };
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type List__415060402<T> = List__790383201<T>;
+type List__790383201<T> =
+  {
+    var blockIndex : Nat__490723111;
+    var blocks : [var [var ?T]];
+    var elementIndex : Nat__490723111
+  };
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type MarketCondition__513204096 =
+  {
+    #Bullish;
+    #HighVolatility;
+    #LowLiquidityDanger;
+    #ManipulationRisk;
+    #Neutral;
+    #Ranging;
+    #StrongBearish;
+    #StrongBullish;
+    #WeakBearish
+  };
+type MarketData__191008276 =
+  {
+    change24h : Float;
+    lastUpdated : Int;
+    marketCap : Float;
+    price : Float;
+    symbol : Text;
+    volume24h : Float
+  };
+type MarketSnapshot__219643727 =
+  {
+    btcDominance : Float;
+    fearGreedIndex : ?Float;
+    markets : [MarketData__191008276];
+    timestamp : Int;
+    totalMarketCap : Float
+  };
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type NoTradeDecision__1053270506 =
+  {
+    confidenceAtTime : Float;
+    marketRegime : MarketCondition__513204096;
+    reason : NoTradeReason__1021758695;
+    symbol : Symbol__558314093;
+    thresholdAtTime : Float;
+    timestamp : Timestamp__301639476
+  };
+type NoTradeReason__1021758695 =
+  {
+    #CorrelationLimit;
+    #DrawdownProtection;
+    #ExistingPosition;
+    #LiquidityTooLow;
+    #LowConfidence;
+    #OvertradingFlag;
+    #RegimeMismatch;
+    #VolatilityTooHigh
+  };
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type PartialExitLevel__83497635 = (Float, Float);
+type Portfolio__723130175 =
+  {
+    cashBalance : Float;
+    dayPnl : Float;
+    dayPnlPercent : Float;
+    investedValue : Float;
+    positions : [Position__942404438];
+    totalPnl : Float;
+    totalPnlPercent : Float;
+    totalTrades : Nat;
+    totalValue : Float;
+    winRate : Float;
+    winningTrades : Nat
+  };
+type Position__942404438 =
+  {
+    averageEntryPrice : Float;
+    currentPrice : Float;
+    openTime : Int;
+    quantity : Float;
+    stopLoss : Float;
+    symbol : Text;
+    takeProfit : ?Float;
+    unrealizedPnl : Float;
+    unrealizedPnlPercent : Float
+  };
+type RegimeBreakdown__707571886 =
+  {regime : MarketCondition__513204096; returnPct : Float; winRate : Float};
+type RiskEventType__680249441 =
+  {
+    #ConsecutiveLossesAutopaused;
+    #DailyLossLimitHit;
+    #EmergencyStop;
+    #ManualPause;
+    #ResumeTrade;
+    #VolatilityPause
+  };
+type RiskEvent__1010185243 =
+  {
+    eventType : RiskEventType__680249441;
+    id : Text;
+    message : Text;
+    severity : RiskSeverity__590293709;
+    timestamp : Int
+  };
+type RiskSettings__1037707527 =
+  {
+    conservativeMode : Bool;
+    emergencyStopEnabled : Bool;
+    enablePaperTrading : Bool;
+    maxConsecutiveLosses : Nat;
+    maxDailyLossPercent : Float;
+    maxPositionSizePercent : Float
+  };
+type RiskSeverity__590293709 = {#Critical; #Info; #Warning};
+type SimulationFidelity__1068954128 =
+  {
+    feeMakerPct : Float;
+    feeTakerPct : Float;
+    slippagePct : Float;
+    spreadPct : Float
+  };
+type StrategyMode__252607731 =
+  {#Defensive; #MeanReversion; #Observation; #Scalping; #TrendFollowing};
+type StrategyPerformanceByRegime__88160753 =
+  {
+    avgHoldTimeSeconds : Int;
+    avgPnl : Float;
+    lossCount : Nat;
+    marketCondition : MarketCondition__513204096;
+    strategyMode : StrategyMode__252607731;
+    totalPnl : Float;
+    winCount : Nat
+  };
+type StrategyPerformance__25775061 =
+  {
+    avgConfidence : Float;
+    lastUpdated : Int;
+    losses : Nat;
+    strategyMode : StrategyMode__252607731;
+    totalPnl : Float;
+    totalTrades : Nat;
+    winRate : Float;
+    wins : Nat
+  };
+type Symbol__558314093 = Text;
+type TechnicalIndicators__879474365 =
+  {
+    atr : Float;
+    bollingerLower : Float;
+    bollingerMid : Float;
+    bollingerUpper : Float;
+    ema20 : Float;
+    ema50 : Float;
+    macd : Float;
+    macdSignal : Float;
+    momentum : Float;
+    rsi : Float;
+    trendStrength : Float
+  };
+type Timestamp__301639476 = Int;
+type TradeAction__178898485 = {#Buy; #Hold; #Sell; #Skip};
+type TradeDecision__577316000 =
+  {
+    action : TradeAction__178898485;
+    confidence : Float;
+    entryPrice : Float;
+    id : Text;
+    indicators :
+      {
+        atr : Float;
+        bollingerLower : Float;
+        bollingerMid : Float;
+        bollingerUpper : Float;
+        ema20 : Float;
+        ema50 : Float;
+        macd : Float;
+        macdSignal : Float;
+        momentum : Float;
+        rsi : Float;
+        trendStrength : Float
+      };
+    marketCondition :
+      {
+        #Bullish;
+        #HighVolatility;
+        #LowLiquidityDanger;
+        #ManipulationRisk;
+        #Neutral;
+        #Ranging;
+        #StrongBearish;
+        #StrongBullish;
+        #WeakBearish
+      };
+    reasoning : Text;
+    riskReward : Float;
+    stopLoss : Float;
+    strategyMode : StrategyMode__252607731;
+    symbol : Text;
+    targetPrice : ?Float;
+    timestamp : Int
+  };
+type TradeId__674499473 = Text;
+type TradeSnapshot__543926760 =
+  {
+    aiReasoningText : Text;
+    confidenceFactors : ConfidenceFactors__475413898;
+    indicatorsAtEntry : TechnicalIndicators__879474365;
+    marketRegimeAtEntry : MarketCondition__513204096;
+    netImpactPct : Float;
+    simulatedFees : Float;
+    simulatedLatencyMs : Nat;
+    simulatedSlippage : Float;
+    simulatedSpread : Float;
+    tags : [TradeTag__208444514];
+    tradeId : TradeId__674499473;
+    volatilityRatio : Float
+  };
+type TradeStatus__624300979 =
+  {#Cancelled; #Closed; #Open; #StopLossHit; #TakeProfitHit};
+type TradeTag__208444514 =
+  {
+    #GoodDiscipline;
+    #GoodScaling;
+    #OvertradeLoss;
+    #PrematureExit;
+    #RegimeMismatch;
+    #TextbookWin;
+    #TightStop
+  };
+type Trade__118004559 =
+  {
+    action : TradeAction__178898485;
+    closeTime : Int;
+    decisionId : Text;
+    entryPrice : Float;
+    exitPrice : ?Float;
+    id : Text;
+    openTime : Int;
+    pnl : ?Float;
+    pnlPercent : ?Float;
+    quantity : Float;
+    status : TradeStatus__624300979;
+    stopLoss : Float;
+    symbol : Text;
+    takeProfit : ?Float
+  };
+type TradingMode__804333982 = {#Autonomous; #Manual; #SignalOnly};
+type UserRole__1073662873 = {#admin; #guest; #user};
+actor {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__605269027<Principal, UserRole__1073662873>
+    };
+  stable aiState :
+    {
+      var cycleCount : Nat;
+      var isRunning : Bool;
+      var lastRunTime : Int;
+      var mode : Text;
+      var nextRunTime : Int
+    };
+  stable arenaSessions :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?ArenaSession__43438282]];
+      var elementIndex : Nat__490723111
+    };
+  stable backtestSessions :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?BacktestSession__71191967]];
+      var elementIndex : Nat__490723111
+    };
+  stable botConfig : {var value : BotConfig__497733849};
+  stable botState : {var value : BotState__604828795};
+  stable candleStore :
+    {
+      var root : Node__46230540<Text, List__415060402<Candle__823835442>>;
+      var size : Nat__490723111
+    };
+  stable confidenceHist :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?ConfidencePoint__388000762]];
+      var elementIndex : Nat__490723111
+    };
+  stable dailyRealizedPnL : {var value : Float};
+  stable decisionLogs :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?AIDecisionLog__453764565]];
+      var elementIndex : Nat__490723111
+    };
+  stable equityHistory :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?EquitySnapshot__655578696]];
+      var elementIndex : Nat__490723111
+    };
+  stable exchangeConnections :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?ExchangeConnection__662870294]];
+      var elementIndex : Nat__490723111
+    };
+  stable latestCondition : {var value : ?MarketCondition__513204096};
+  stable marketSnapshots :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?MarketSnapshot__219643727]];
+      var elementIndex : Nat__490723111
+    };
+  stable noTradeDecisions :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?NoTradeDecision__1053270506]];
+      var elementIndex : Nat__490723111
+    };
+  stable portfolio : {var value : Portfolio__723130175};
+  stable riskEvents :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?RiskEvent__1010185243]];
+      var elementIndex : Nat__490723111
+    };
+  stable riskSettings : {var value : RiskSettings__1037707527};
+  stable riskState :
+    {
+      var consecutiveLosses : Nat;
+      var dailyLoss : Float;
+      var dailyLossPercent : Float;
+      var isPaused : Bool;
+      var riskScore : Float
+    };
+  stable simCosts :
+    {
+      var totalFees : Float;
+      var totalSlippage : Float;
+      var totalSpread : Float;
+      var tradeCount : Nat
+    };
+  stable strategyPerformances :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?StrategyPerformance__25775061]];
+      var elementIndex : Nat__490723111
+    };
+  stable tradeSnapshots :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?TradeSnapshot__543926760]];
+      var elementIndex : Nat__490723111
+    };
+  stable trades :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Trade__118004559]];
+      var elementIndex : Nat__490723111
+    };
+  stable trainingState : {var value : AITrainingState__770988635}
+};

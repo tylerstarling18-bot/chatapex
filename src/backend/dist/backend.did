@@ -1,0 +1,743 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type TradingMode = 
+ variant {
+   Autonomous;
+   Manual;
+   SignalOnly;
+ };
+type TradeTag = 
+ variant {
+   GoodDiscipline;
+   GoodScaling;
+   OvertradeLoss;
+   PrematureExit;
+   RegimeMismatch;
+   TextbookWin;
+   TightStop;
+ };
+type TradeStatus = 
+ variant {
+   Cancelled;
+   Closed;
+   Open;
+   StopLossHit;
+   TakeProfitHit;
+ };
+type TradeSnapshot = 
+ record {
+   aiReasoningText: text;
+   confidenceFactors: ConfidenceFactors;
+   indicatorsAtEntry: TechnicalIndicators;
+   marketRegimeAtEntry: MarketCondition;
+   netImpactPct: float64;
+   simulatedFees: float64;
+   simulatedLatencyMs: nat;
+   simulatedSlippage: float64;
+   simulatedSpread: float64;
+   tags: vec TradeTag;
+   tradeId: TradeId;
+   volatilityRatio: float64;
+ };
+type TradeId = text;
+type TradeDecision = 
+ record {
+   action: TradeAction;
+   confidence: float64;
+   entryPrice: float64;
+   id: text;
+   indicators:
+    record {
+      atr: float64;
+      bollingerLower: float64;
+      bollingerMid: float64;
+      bollingerUpper: float64;
+      ema20: float64;
+      ema50: float64;
+      macd: float64;
+      macdSignal: float64;
+      momentum: float64;
+      rsi: float64;
+      trendStrength: float64;
+    };
+   marketCondition:
+    variant {
+      Bullish;
+      HighVolatility;
+      LowLiquidityDanger;
+      ManipulationRisk;
+      Neutral;
+      Ranging;
+      StrongBearish;
+      StrongBullish;
+      WeakBearish;
+    };
+   reasoning: text;
+   riskReward: float64;
+   stopLoss: float64;
+   strategyMode: StrategyMode;
+   symbol: text;
+   targetPrice: opt float64;
+   timestamp: int;
+ };
+type TradeAction = 
+ variant {
+   Buy;
+   Hold;
+   Sell;
+   Skip;
+ };
+type Trade = 
+ record {
+   action: TradeAction;
+   closeTime: int;
+   decisionId: text;
+   entryPrice: float64;
+   exitPrice: opt float64;
+   id: text;
+   openTime: int;
+   pnl: opt float64;
+   pnlPercent: opt float64;
+   quantity: float64;
+   status: TradeStatus;
+   stopLoss: float64;
+   symbol: text;
+   takeProfit: opt float64;
+ };
+type Timestamp = int;
+type TechnicalIndicators = 
+ record {
+   atr: float64;
+   bollingerLower: float64;
+   bollingerMid: float64;
+   bollingerUpper: float64;
+   ema20: float64;
+   ema50: float64;
+   macd: float64;
+   macdSignal: float64;
+   momentum: float64;
+   rsi: float64;
+   trendStrength: float64;
+ };
+type Symbol = text;
+type StrategyPerformanceByRegime = 
+ record {
+   avgHoldTimeSeconds: int;
+   avgPnl: float64;
+   lossCount: nat;
+   marketCondition: MarketCondition;
+   strategyMode: StrategyMode;
+   totalPnl: float64;
+   winCount: nat;
+ };
+type StrategyPerformance = 
+ record {
+   avgConfidence: float64;
+   lastUpdated: int;
+   losses: nat;
+   strategyMode: StrategyMode;
+   totalPnl: float64;
+   totalTrades: nat;
+   winRate: float64;
+   wins: nat;
+ };
+type StrategyMode = 
+ variant {
+   Defensive;
+   MeanReversion;
+   Observation;
+   Scalping;
+   TrendFollowing;
+ };
+type SimulationStats = 
+ record {
+   avgFeePct: float64;
+   avgSlippagePct: float64;
+   totalFeeCost: float64;
+   totalSlippageCost: float64;
+   totalSpreadCost: float64;
+ };
+type SimulationFidelity = 
+ record {
+   feeMakerPct: float64;
+   feeTakerPct: float64;
+   slippagePct: float64;
+   spreadPct: float64;
+ };
+type RiskStatus = 
+ record {
+   consecutiveLosses: nat;
+   dailyLoss: float64;
+   dailyLossPercent: float64;
+   isPaused: bool;
+   riskScore: float64;
+ };
+type RiskSeverity = 
+ variant {
+   Critical;
+   Info;
+   Warning;
+ };
+type RiskSettings = 
+ record {
+   conservativeMode: bool;
+   emergencyStopEnabled: bool;
+   enablePaperTrading: bool;
+   maxConsecutiveLosses: nat;
+   maxDailyLossPercent: float64;
+   maxPositionSizePercent: float64;
+ };
+type RiskEventType = 
+ variant {
+   ConsecutiveLossesAutopaused;
+   DailyLossLimitHit;
+   EmergencyStop;
+   ManualPause;
+   ResumeTrade;
+   VolatilityPause;
+ };
+type RiskEvent = 
+ record {
+   eventType: RiskEventType;
+   id: text;
+   message: text;
+   severity: RiskSeverity;
+   timestamp: int;
+ };
+type RegimeBreakdown = 
+ record {
+   regime: MarketCondition;
+   returnPct: float64;
+   winRate: float64;
+ };
+type Position = 
+ record {
+   averageEntryPrice: float64;
+   currentPrice: float64;
+   openTime: int;
+   quantity: float64;
+   stopLoss: float64;
+   symbol: text;
+   takeProfit: opt float64;
+   unrealizedPnl: float64;
+   unrealizedPnlPercent: float64;
+ };
+type Portfolio = 
+ record {
+   cashBalance: float64;
+   dayPnl: float64;
+   dayPnlPercent: float64;
+   investedValue: float64;
+   positions: vec Position;
+   totalPnl: float64;
+   totalPnlPercent: float64;
+   totalTrades: nat;
+   totalValue: float64;
+   winRate: float64;
+   winningTrades: nat;
+ };
+type PartialExitLevel = 
+ record {
+   float64;
+   float64;
+ };
+type OrderRecord = 
+ record {
+   orderId: text;
+   price: float64;
+   qty: float64;
+   side: text;
+   status: text;
+   symbol: text;
+   timestamp: int;
+ };
+type NoTradeReason = 
+ variant {
+   CorrelationLimit;
+   DrawdownProtection;
+   ExistingPosition;
+   LiquidityTooLow;
+   LowConfidence;
+   OvertradingFlag;
+   RegimeMismatch;
+   VolatilityTooHigh;
+ };
+type NoTradeDecision = 
+ record {
+   confidenceAtTime: float64;
+   marketRegime: MarketCondition;
+   reason: NoTradeReason;
+   symbol: Symbol;
+   thresholdAtTime: float64;
+   timestamp: Timestamp;
+ };
+type MarketSnapshot = 
+ record {
+   btcDominance: float64;
+   fearGreedIndex: opt float64;
+   markets: vec MarketData;
+   timestamp: int;
+   totalMarketCap: float64;
+ };
+type MarketData = 
+ record {
+   change24h: float64;
+   lastUpdated: int;
+   marketCap: float64;
+   price: float64;
+   symbol: text;
+   volume24h: float64;
+ };
+type MarketCondition = 
+ variant {
+   Bullish;
+   HighVolatility;
+   LowLiquidityDanger;
+   ManipulationRisk;
+   Neutral;
+   Ranging;
+   StrongBearish;
+   StrongBullish;
+   WeakBearish;
+ };
+type ExchangeStatus = 
+ record {
+   connected: bool;
+   exchangeId: text;
+   lastTestTimestamp: int;
+   phase: nat;
+ };
+type EquitySnapshot = 
+ record {
+   cash: float64;
+   dailyPnLPct: float64;
+   equity: float64;
+   positionValue: float64;
+   realizedPnLToday: float64;
+   timestamp: nat64;
+   totalPnLPct: float64;
+   unrealizedPnL: float64;
+ };
+type EquityPoint = 
+ record {
+   timestamp: int;
+   value: float64;
+ };
+type DecisionCycleStats = 
+ record {
+   avgConfidence: float64;
+   cyclesPerHour: float64;
+   noTradeRate: float64;
+   totalCycles: nat;
+   tradesThisSession: nat;
+   winRate: float64;
+ };
+type DataFeedStatus = 
+ record {
+   assetCount: nat;
+   healthy: bool;
+   lastFetchAt: opt nat64;
+   staleSince: opt nat64;
+ };
+type CorrelationData = 
+ record {
+   btcCorrelation: float64;
+   lastUpdated: int;
+   symbol: text;
+ };
+type ConfidencePoint = 
+ record {
+   action: text;
+   asset: text;
+   confidence: float64;
+   regime: text;
+   timestamp: nat64;
+ };
+type ConfidenceFactors = 
+ record {
+   historicalSetupPerformance: float64;
+   liquidity: float64;
+   marketStructure: float64;
+   momentum: float64;
+   regimeConfidence: float64;
+   total: float64;
+   trendAlignment: float64;
+   volatilityQuality: float64;
+ };
+type Candle = 
+ record {
+   close: float64;
+   high: float64;
+   low: float64;
+   open: float64;
+   timestamp: int;
+   volume: float64;
+ };
+type BotStatus = 
+ variant {
+   EmergencyStopped;
+   Paused;
+   Running;
+   Stopped;
+ };
+type BotState = 
+ record {
+   dataFeedHealthy: bool;
+   decisionCycleCount: nat;
+   lastDataFetchAt: opt nat64;
+   lastDecisionAt: opt nat64;
+   startedAt: opt nat64;
+   status: BotStatus;
+   tradesExecutedCount: nat;
+   uptimeSeconds: nat64;
+ };
+type BotConfig = 
+ record {
+   decisionIntervalSecs: nat;
+   partialExitLevels: vec PartialExitLevel;
+   refreshIntervalSecs: nat;
+   simulationFidelity: SimulationFidelity;
+   startingBalance: float64;
+   tradingMode: TradingMode;
+   volatilityPositionSizing: bool;
+ };
+type BacktestStatus = 
+ variant {
+   Completed;
+   Failed;
+   Running;
+ };
+type BacktestSession = 
+ record {
+   endDate: int;
+   id: text;
+   initialBalance: float64;
+   name: text;
+   results: opt BacktestResults;
+   startDate: int;
+   status: BacktestStatus;
+   symbols: vec text;
+ };
+type BacktestResults = 
+ record {
+   equityCurve: vec EquityPoint;
+   finalBalance: float64;
+   maxDrawdown: float64;
+   sharpeRatio: opt float64;
+   totalPnlPercent: float64;
+   totalReturn: float64;
+   totalTrades: nat;
+   trades:
+    vec
+     record {
+       action: variant {
+                 Buy;
+                 Hold;
+                 Sell;
+                 Skip;
+               };
+       closeTime: int;
+       decisionId: text;
+       entryPrice: float64;
+       exitPrice: opt float64;
+       id: text;
+       openTime: int;
+       pnl: opt float64;
+       pnlPercent: opt float64;
+       quantity: float64;
+       status: variant {
+                 Cancelled;
+                 Closed;
+                 Open;
+                 StopLossHit;
+                 TakeProfitHit;
+               };
+       stopLoss: float64;
+       symbol: text;
+       takeProfit: opt float64;
+     };
+   winRate: float64;
+ };
+type AssetBalance = 
+ record {
+   asset: text;
+   free: float64;
+   locked: float64;
+ };
+type ArenaSession = 
+ record {
+   completedAt: int;
+   endDate: text;
+   initialCapital: float64;
+   results: vec ArenaResult;
+   sessionId: text;
+   startDate: text;
+   symbol: text;
+ };
+type ArenaResult = 
+ record {
+   agentId: text;
+   avgHoldTime: int;
+   finalBalance: float64;
+   maxDrawdownPct: float64;
+   performanceByRegime: vec RegimeBreakdown;
+   sharpeRatio: float64;
+   totalReturnPct: float64;
+   tradeCount: nat;
+   winRate: float64;
+ };
+type ActivityItem = 
+ record {
+   action: text;
+   asset: text;
+   confidence: float64;
+   executed: bool;
+   reasoning: text;
+   timestamp: nat64;
+ };
+type AITrainingState = 
+ record {
+   avgConfidenceScore: float64;
+   confidenceCalibration: float64;
+   confidenceThreshold: float64;
+   consecutiveLosses: nat;
+   correlationData: vec CorrelationData;
+   lastTrainingUpdate: int;
+   learningProgress: float64;
+   marketMemory: vec StrategyPerformanceByRegime;
+   noTradeLog: vec NoTradeDecision;
+   overallWinRate: float64;
+   overtradingCount: nat;
+   practiceTradesCount: nat;
+   strategyPerformances:
+    vec
+     record {
+       avgConfidence: float64;
+       lastUpdated: int;
+       losses: nat;
+       strategyMode:
+        variant {
+          Defensive;
+          MeanReversion;
+          Observation;
+          Scalping;
+          TrendFollowing;
+        };
+       totalPnl: float64;
+       totalTrades: nat;
+       winRate: float64;
+       wins: nat;
+     };
+   totalSessions: nat;
+ };
+type AIDecisionLog = 
+ record {
+   alternativesConsidered: vec record {
+                                 text;
+                                 float64;
+                               };
+   confidenceFactors:
+    record {
+      historicalSetupPerformance: float64;
+      liquidity: float64;
+      marketStructure: float64;
+      momentum: float64;
+      regimeConfidence: float64;
+      total: float64;
+      trendAlignment: float64;
+      volatilityQuality: float64;
+    };
+   decision: TradeDecision;
+   decisionCycleId: nat;
+   executedTradeId: opt text;
+   executionDetails:
+    opt
+     record {
+       executionDelayMs: nat;
+       feePct: float64;
+       slippagePct: float64;
+       spreadPct: float64;
+     };
+   executionStatus: variant {
+                      Executed;
+                      Failed;
+                      Pending;
+                      Skipped;
+                    };
+   indicatorValues:
+    record {
+      atr: float64;
+      bollingerBandwidth: float64;
+      ema20: float64;
+      ema50: float64;
+      macd: float64;
+      rsi: float64;
+    };
+   marketSnapshot:
+    record {
+      btcDominance: float64;
+      price: float64;
+      volatilityPct: float64;
+      volume24h: float64;
+    };
+   multiTimeframeSignals:
+    vec
+     record {
+       emaAlignment: bool;
+       macdSignal: variant {
+                     Bearish;
+                     Bullish;
+                     Cross;
+                   };
+       rsi: float64;
+       strength: float64;
+       timeframe: text;
+       trend: variant {
+                Bearish;
+                Bullish;
+                Neutral;
+              };
+     };
+   noTradeReason: opt text;
+   skipReason: opt text;
+ };
+service : {
+  _initializeAccessControl: () -> ();
+  applyTradeToTraining: (trade: Trade, decision: TradeDecision) -> () oneway;
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  backtestTransform: (input: TransformationInput) ->
+   (TransformationOutput) query;
+  botTransform: (input: TransformationInput) -> (TransformationOutput) query;
+  closePosition: (symbol: text) -> (variant {
+                                      err: text;
+                                      ok: Trade;
+                                    });
+  emergencyStopBot: () -> (BotState);
+  executeManualTrade: (symbol: text, action: text, quantity: float64) ->
+   (variant {
+      err: text;
+      ok: Trade;
+    });
+  executePendingDecisions: () -> (vec Trade);
+  fetchAndStoreHistoricalCandles: (symbol: text, days: nat) ->
+   (variant {
+      err: text;
+      ok: nat;
+    });
+  fetchMarketData: () -> (vec MarketData);
+  getAIStatus: () ->
+   (record {
+      cycleCount: nat;
+      isRunning: bool;
+      lastRunTime: int;
+      mode: text;
+      nextRunTime: int;
+    }) query;
+  getAITrainingState: () -> (AITrainingState) query;
+  getAllConfidenceTimeline: (limit: nat) -> (vec ConfidencePoint) query;
+  getArenaResults: (sessionId: text) -> (opt ArenaSession) query;
+  getArenaSessions: () -> (vec ArenaSession) query;
+  getBacktestSession: (id: text) -> (opt BacktestSession) query;
+  getBotConfig: () -> (BotConfig) query;
+  getBotState: () -> (BotState) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getConfidenceTimeline: (asset: text, limit: nat) ->
+   (vec ConfidencePoint) query;
+  getCurrentEquity: () -> (opt EquitySnapshot) query;
+  getCurrentMarketCondition: () -> (opt MarketCondition) query;
+  getDataFeedStatus: () -> (DataFeedStatus) query;
+  getDecisionCycleStats: () -> (DecisionCycleStats) query;
+  getDecisionsByAsset: (asset: text, limit: nat) -> (vec AIDecisionLog) query;
+  getEquityHistory: (limit: nat) -> (vec EquitySnapshot) query;
+  getExchangeBalances: (exchangeId: text) -> (vec AssetBalance);
+  getExchangeConnections: () -> (vec ExchangeStatus) query;
+  getExchangeOrderHistory: (exchangeId: text) -> (vec OrderRecord);
+  getHistoricalCandles: (symbol: text, days: nat) -> (vec Candle);
+  getLatestDecisions: (limit: nat) -> (vec AIDecisionLog) query;
+  getLatestSnapshot: () -> (opt MarketSnapshot) query;
+  getLiveActivityFeed: (limit: nat) -> (vec ActivityItem) query;
+  getMarketCandles: (symbol: text) -> (vec Candle) query;
+  getMarketMemory: () -> (vec StrategyPerformanceByRegime) query;
+  getNoTradeLog: () -> (vec NoTradeDecision) query;
+  getOpenPositions: () -> (vec Position) query;
+  getPortfolio: () -> (Portfolio) query;
+  getRecentDecisions: (limit: nat) -> (vec AIDecisionLog) query;
+  getRiskEvents: (limit: nat) -> (vec RiskEvent) query;
+  getRiskSettings: () -> (RiskSettings) query;
+  getRiskStatus: () -> (RiskStatus) query;
+  getSimulationStats: () -> (SimulationStats) query;
+  getStrategyPerformances: () -> (vec StrategyPerformance) query;
+  getTopSetups: () -> (vec StrategyPerformanceByRegime) query;
+  getTradeHistory: (limit: nat) -> (vec Trade) query;
+  getTradeSnapshot: (tradeId: text) -> (opt TradeSnapshot) query;
+  isCallerAdmin: () -> (bool) query;
+  listBacktestSessions: () -> (vec BacktestSession) query;
+  pauseBot: () -> (BotState);
+  refreshGlobalData: () -> (float64, float64);
+  removeExchangeConnection: (exchangeId: text) -> (bool);
+  resetBot: () -> (BotState);
+  resetTrainingData: () -> (bool);
+  resumeBot: () -> (BotState);
+  resumeTrading: () -> (bool);
+  runAIAnalysis: () -> (vec AIDecisionLog);
+  runDecisionCycle: () ->
+   (variant {
+      err: text;
+      ok:
+       record {
+         decisionsGenerated: nat;
+         positionsUpdated: nat;
+         reasoning: text;
+         skipped: nat;
+         tradesExecuted: nat;
+       };
+    });
+  runMarketCycle: () -> (variant {
+                           err: text;
+                           ok: text;
+                         });
+  saveExchangeConnection: (exchangeId: text, apiKey: text, apiSecret:
+   text) -> (bool);
+  setAIMode: (mode: text) -> (bool);
+  startArena: (symbol: text, startDate: text, endDate: text) -> (text);
+  startBacktest: (name: text, symbols: vec text, startDate: int, endDate:
+   int, initialBalance: float64) -> (BacktestSession);
+  startBot: () -> (variant {
+                     err: text;
+                     ok: BotState;
+                   });
+  testExchangeConnection: (exchangeId: text) -> (bool);
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+  triggerEmergencyStop: () -> (bool);
+  updateBotConfig: (cfg: BotConfig) -> (variant {
+                                          err: text;
+                                          ok: BotConfig;
+                                        });
+  updateRiskSettings: (settings: RiskSettings) -> (bool);
+}

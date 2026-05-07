@@ -1,0 +1,27 @@
+{
+  "overview": "Apex AI Trader is a full-stack AI-powered cryptocurrency paper trading bot. It simulates realistic trading with a $10,000 virtual portfolio, using AI to analyze market conditions across 9 regimes, generate confidence-scored trading decisions, and manage risk automatically.",
+  "features": [
+    "AI-powered trading bot with 9 market regime detection",
+    "Live dashboard with bot controls (start/pause/resume/emergency stop)",
+    "Real-time portfolio tracking with equity curve charts",
+    "AI decision logs with confidence factor breakdown",
+    "Multi-timeframe market analysis for 10 top crypto assets",
+    "Historical backtesting with Sharpe ratio and drawdown metrics",
+    "Arena mode for competitive strategy testing",
+    "Risk management with configurable daily loss limits and position sizing",
+    "AI training metrics tracking strategy performance",
+    "Exchange connection management"
+  ],
+  "category": "finance-trading",
+  "tags": [
+    "trading",
+    "ai",
+    "cryptocurrency",
+    "paper-trading",
+    "backtesting",
+    "risk-management",
+    "machine-learning",
+    "fintech"
+  ],
+  "last_updated": "2026-05-07T15:01:59.170Z"
+}
