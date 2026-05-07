@@ -9,11 +9,14 @@ import { DecisionsPage } from "./pages/DecisionsPage";
 import { ExchangePage } from "./pages/ExchangePage";
 import { MarketPage } from "./pages/MarketPage";
 import { RiskPage } from "./pages/RiskPage";
+import { SimulatorPage } from "./pages/SimulatorPage";
 import { TradingPage } from "./pages/TradingPage";
 import { TrainingPage } from "./pages/TrainingPage";
 
 function PageContent({ page }: { page: Page }) {
   switch (page) {
+    case "simulator":
+      return <SimulatorPage />;
     case "dashboard":
       return <DashboardPage />;
     case "market":
@@ -36,7 +39,7 @@ function PageContent({ page }: { page: Page }) {
 }
 
 export default function App() {
-  const [page, setPage] = useState<Page>("dashboard");
+  const [page, setPage] = useState<Page>("simulator");
   const { data: risk } = useRiskStatus();
 
   return (

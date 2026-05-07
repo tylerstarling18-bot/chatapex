@@ -22,11 +22,13 @@ import TrainingTypes "../types/training";
 import MarketLib "../lib/market";
 import OutCall "mo:caffeineai-http-outcalls/outcall";
 import Map "mo:core/Map";
+import Timer "mo:core/Timer";
 
 mixin (
   accessControlState : AccessControl.AccessControlState,
   botConfig     : { var value : BotTypes.BotConfig },
   botState      : { var value : BotTypes.BotState },
+  botTimerState : { var marketTimerId : ?Timer.TimerId; var decisionTimerId : ?Timer.TimerId },
   trades        : List.List<TradingTypes.Trade>,
   portfolio     : { var value : TradingTypes.Portfolio },
   marketSnapshots : List.List<MarketTypes.MarketSnapshot>,
@@ -61,292 +63,56 @@ mixin (
   // Private helpers
   // ---------------------------------------------------------------------------
 
-  func nowNat64() : Nat64 {
-    let t = Time.now();
-    if (t < 0) { 0 } else { (Int.abs(t) / 1_000_000_000).toNat64() };
-  };
+  // ---------------------------------------------------------------------------
+  // Timer helpers — start/cancel recurring market + decision timers
+  // ---------------------------------------------------------------------------
 
-  func nowInt() : Int { Time.now() };
-
-  func botLatestPrices() : [(Text, Float)] {
-    switch (marketSnapshots.last()) {
-      case null [];
-      case (?snap) {
-        snap.markets.map<MarketTypes.MarketData, (Text, Float)>(func(m) { (m.symbol, m.price) });
-      };
-    };
-  };
-
-  func botMakeTradeId(now : Int, suffix : Text) : Text {
-    "t-" # now.toText() # "-" # suffix;
-  };
-
-  func botMakeDecisionId(cycle : Nat, symbol : Text) : Text {
-    "d-" # cycle.toText() # "-" # symbol;
-  };
-
-  // Fetch live market data and cache snapshot. Returns #err on failure.
-  func fetchLiveMarket() : async { #ok : Text; #err : Text } {
-    let headers : [OutCall.Header] = [
-      { name = "User-Agent"; value = "ApexAITrader/1.0" },
-      { name = "Accept";     value = "application/json" },
-    ];
-    let marketsUrl = "https://api.coingecko.com/api/v3/coins/markets" #
-      "?vs_currency=usd" #
-      "&ids=bitcoin,ethereum,binancecoin,solana,cardano,avalanche-2,chainlink,polkadot,uniswap,litecoin" #
-      "&order=market_cap_desc&per_page=10&page=1&sparkline=false&price_change_percentage=24h";
-    let marketsJson = try {
-      await OutCall.httpGetRequest(marketsUrl, headers, botTransform);
-    } catch (_) {
-      botState.value := { botState.value with dataFeedHealthy = false };
-      return #err("Failed to fetch live market data. Please try again.");
-    };
-    let markets = MarketLib.parseMarketDataResponse(marketsJson);
-    if (markets.size() == 0) {
-      botState.value := { botState.value with dataFeedHealthy = false };
-      return #err("Failed to fetch live market data. Please try again.");
-    };
-    let globalJson = try {
-      await OutCall.httpGetRequest("https://api.coingecko.com/api/v3/global", headers, botTransform);
-    } catch (_) { "" };
-    let (totalMcap, btcDom) = if (globalJson == "") {
-      (MarketLib.totalMarketCap(markets), 0.0);
-    } else {
-      MarketLib.parseGlobalData(globalJson);
-    };
-    let snap = MarketLib.buildSnapshot(markets, btcDom, totalMcap);
-    marketSnapshots.add(snap);
-    if (marketSnapshots.size() > 1440) {
-      let arr = marketSnapshots.toArray();
-      marketSnapshots.clear();
-      marketSnapshots.addAll(arr.values().drop(1));
-    };
-    let t = nowNat64();
-    botState.value := { botState.value with
-      lastDataFetchAt = ?t;
-      dataFeedHealthy = true;
-    };
-    #ok("Fetched " # markets.size().toText() # " assets");
-  };
-
-  func candlesForSymbol(symbol : Text) : [MarketTypes.Candle] {
-    // 1. Use stored OHLCV candles if available
-    switch (candleStore.get(symbol)) {
-      case (?stored) {
-        if (stored.size() >= 2) {
-          return stored.toArray();
-        };
-      };
+  func cancelBotTimers() {
+    switch (botTimerState.marketTimerId) {
+      case (?id) { Timer.cancelTimer(id); botTimerState.marketTimerId := null };
       case null {};
     };
-    // 2. Fall back to price history from market snapshots (no fabrication)
-    let snaps = marketSnapshots.toArray();
-    snaps.filterMap(
-      func(snap) {
-        switch (snap.markets.find(func(m : MarketTypes.MarketData) : Bool { m.symbol == symbol })) {
-          case null null;
-          case (?m) {
-            let p = m.price;
-            ?{ open = p; high = p * 1.001; low = p * 0.999; close = p;
-               volume = m.volume24h / 1440.0; timestamp = snap.timestamp };
-          };
-        };
-      }
+    switch (botTimerState.decisionTimerId) {
+      case (?id) { Timer.cancelTimer(id); botTimerState.decisionTimerId := null };
+      case null {};
+    };
+  };
+
+  func startBotTimers<system>() {
+    cancelBotTimers();
+    let cfg = botConfig.value;
+    let marketSecs = cfg.refreshIntervalSecs;
+    let decisionSecs = cfg.decisionIntervalSecs;
+    botTimerState.marketTimerId := ?Timer.recurringTimer<system>(
+      #seconds marketSecs,
+      func() : async () {
+        ignore await fetchLiveMarket();
+      },
+    );
+    botTimerState.decisionTimerId := ?Timer.recurringTimer<system>(
+      #seconds decisionSecs,
+      func() : async () {
+        ignore await runDecisionCycleInternal();
+      },
     );
   };
 
-  // ---------------------------------------------------------------------------
-  // Bot lifecycle API
-  // ---------------------------------------------------------------------------
-
-  public shared func startBot() : async { #ok : BotTypes.BotState; #err : Text } {
-    let cur = botState.value;
-    switch (cur.status) {
-      case (#Running) { return #err("Bot is already running") };
-      case _ {};
-    };
-    // Transition to Running so downstream calls see correct status
-    let newState = BotLib.startTransition(cur);
-    botState.value := newState;
-    aiState.mode := "paper";
-
-    // Fetch live market data immediately — bot MUST have real data before first cycle
-    switch (await fetchLiveMarket()) {
-      case (#err(msg)) {
-        // Roll back to stopped state so the user can retry
-        botState.value := BotLib.stoppedState();
-        aiState.mode := "paper";
-        return #err(msg);
-      };
-      case (#ok(_)) {};
-    };
-
-    // Initial equity snapshot with real live prices
-    let cfg = botConfig.value;
-    let prices = botLatestPrices();
-    let initialPortfolio = PaperTrading.computePortfolio(trades, prices, cfg.startingBalance);
-    let initialSnap = BotLib.buildEquitySnapshot(initialPortfolio, dailyRealizedPnL.value, cfg.startingBalance);
-    equityHistory.add(initialSnap);
-
-    #ok(botState.value);
-  };
-
-
-  public shared func pauseBot() : async BotTypes.BotState {
-    let newState = BotLib.pauseTransition(botState.value);
-    botState.value := newState;
-    aiState.mode := "paused";
-    newState;
-  };
-
-  public shared func resumeBot() : async BotTypes.BotState {
-    let newState = BotLib.resumeTransition(botState.value);
-    botState.value := newState;
-    aiState.mode := "paper";
-    newState;
-  };
-
-  public shared func emergencyStopBot() : async BotTypes.BotState {
-    let newState = BotLib.emergencyStopTransition(botState.value);
-    botState.value := newState;
-    aiState.mode := "paused";
-    riskState.isPaused := true;
-    newState;
-  };
-
-  public shared func resetBot() : async BotTypes.BotState {
-    let cfg = botConfig.value;
-    trades.clear();
-    portfolio.value := {
-      totalValue = cfg.startingBalance;
-      cashBalance = cfg.startingBalance;
-      investedValue = 0.0;
-      totalPnl = 0.0;
-      totalPnlPercent = 0.0;
-      dayPnl = 0.0;
-      dayPnlPercent = 0.0;
-      winRate = 0.0;
-      totalTrades = 0;
-      winningTrades = 0;
-      positions = [];
-    };
-    decisionLogs.clear();
-    aiState.cycleCount := 0;
-    aiState.lastRunTime := 0;
-    aiState.nextRunTime := 0;
-    aiState.mode := "paper";
-    aiState.isRunning := false;
-    riskState.isPaused := false;
-    riskState.dailyLoss := 0.0;
-    riskState.dailyLossPercent := 0.0;
-    riskState.consecutiveLosses := 0;
-    riskState.riskScore := 0.0;
-    let ts = trainingState.value;
-    trainingState.value := { ts with
-      practiceTradesCount = 0;
-      overallWinRate = 0.0;
-      consecutiveLosses = 0;
-      overtradingCount = 0;
-    };
-    equityHistory.clear();
-    confidenceHist.clear();
-    simCosts.totalSlippage := 0.0;
-    simCosts.totalFees := 0.0;
-    simCosts.totalSpread := 0.0;
-    simCosts.tradeCount := 0;
-    dailyRealizedPnL.value := 0.0;
-    let newState = BotLib.resetTransition();
-    botState.value := newState;
-    newState;
-  };
-
-  public query func getBotState() : async BotTypes.BotState {
-    let s = botState.value;
-    { s with uptimeSeconds = BotLib.computeUptime(s.startedAt) };
-  };
-
-  public query func getBotConfig() : async BotTypes.BotConfig {
-    botConfig.value;
-  };
-
-  public shared func updateBotConfig(cfg : BotTypes.BotConfig) : async { #ok : BotTypes.BotConfig; #err : Text } {
-    switch (BotLib.validateConfig(cfg)) {
-      case (?err) { #err(err) };
-      case null {
-        botConfig.value := cfg;
-        #ok(cfg);
-      };
-    };
-  };
-
-  // ---------------------------------------------------------------------------
-  // Market data cycle
-  // ---------------------------------------------------------------------------
-
-  public shared func runMarketCycle() : async { #ok : Text; #err : Text } {
-    await fetchLiveMarket();
-  };
-
-  // Fetch OHLCV candles for a symbol from CoinGecko and store them.
-  // Replaces any previously stored candles for that symbol.
-  public shared func fetchAndStoreHistoricalCandles(symbol : Text, days : Nat) : async { #ok : Nat; #err : Text } {
-    let coinId = MarketLib.symbolToCoingeckoId(symbol);
-    let daysText = days.toText();
-    let url = "https://api.coingecko.com/api/v3/coins/" # coinId #
-      "/ohlc?vs_currency=usd&days=" # daysText;
-    let headers : [OutCall.Header] = [
-      { name = "User-Agent"; value = "ApexAITrader/1.0" },
-      { name = "Accept";     value = "application/json" },
-    ];
-    let json = try {
-      await OutCall.httpGetRequest(url, headers, botTransform);
-    } catch (_) {
-      return #err("Failed to fetch candles for " # symbol # ". Please try again.");
-    };
-    let candles = MarketLib.parseCandleResponse(json);
-    if (candles.size() == 0) {
-      return #err("No candle data returned for " # symbol);
-    };
-    let stored = List.empty<MarketTypes.Candle>();
-    stored.addAll(candles.values());
-    candleStore.add(symbol, stored);
-    #ok(candles.size());
-  };
-
-  // Return stored OHLCV candles for a given symbol (fetched via fetchAndStoreHistoricalCandles).
-  // Falls back to price-history candles derived from market snapshots.
-  public query func getMarketCandles(symbol : Text) : async [MarketTypes.Candle] {
-    candlesForSymbol(symbol);
-  };
-
-  public query func getDataFeedStatus() : async BotTypes.DataFeedStatus {
-    let bs = botState.value;
-    let stale : ?Nat64 = if (not bs.dataFeedHealthy) { bs.lastDataFetchAt } else { null };
-    let assetCount : Nat = switch (marketSnapshots.last()) {
-      case null 0;
-      case (?s) s.markets.size();
-    };
-    {
-      healthy     = bs.dataFeedHealthy;
-      lastFetchAt = bs.lastDataFetchAt;
-      assetCount;
-      staleSince  = stale;
-    };
-  };
-
-  // ---------------------------------------------------------------------------
-  // Autonomous decision cycle
-  // ---------------------------------------------------------------------------
-
-  public shared func runDecisionCycle() : async { #ok : { decisionsGenerated : Nat; tradesExecuted : Nat; positionsUpdated : Nat; skipped : Nat; reasoning : Text }; #err : Text } {
+  // Internal decision cycle implementation (shared by public API and timers)
+  func runDecisionCycleInternal() : async { #ok : { decisionsGenerated : Nat; tradesExecuted : Nat; positionsUpdated : Nat; skipped : Nat; reasoning : Text }; #err : Text } {
     let bs = botState.value;
     switch (bs.status) {
       case (#Running) {};
-      case _ { return #err("Bot is not running (status: " # debug_show(bs.status) # ")") };
+      case _ { return #err("Bot is not running") };
     };
     if (BotLib.isDataStale(bs.lastDataFetchAt)) {
-      botState.value := { bs with dataFeedHealthy = false };
-      return #err("Data feed stale \u{2014} call runMarketCycle first");
+      // Auto-refresh market data when stale instead of erroring
+      switch (await fetchLiveMarket()) {
+        case (#err(_)) {
+          botState.value := { bs with dataFeedHealthy = false };
+          return #err("Data feed stale and refresh failed");
+        };
+        case (#ok(_)) {};
+      };
     };
     if (riskState.isPaused) {
       return #err("Risk system paused");
@@ -367,7 +133,6 @@ mixin (
     var skipped : Nat = 0;
     let reasoningParts = List.empty<Text>();
 
-    // 1) Check open positions for stop-loss / take-profit
     let closedByStop = PaperTrading.checkStopsAndTargets(trades, prices, now);
     for (t in closedByStop.values()) {
       positionsUpdated += 1;
@@ -386,7 +151,6 @@ mixin (
       };
     };
 
-    // 2) Generate AI decisions + execute autonomously
     for (symbol in symbols.values()) {
       let candles = candlesForSymbol(symbol);
       let marketData : ?MarketTypes.MarketData = switch (marketSnapshots.last()) {
@@ -428,7 +192,6 @@ mixin (
 
       decisionsGenerated += 1;
 
-      // Confidence timeline
       let cp = BotLib.buildConfidencePoint(symbol, confidence, decision.action, condition);
       confidenceHist.add(cp);
       if (confidenceHist.size() > 2880) {
@@ -612,6 +375,289 @@ mixin (
     };
 
     #ok({ decisionsGenerated; tradesExecuted; positionsUpdated; skipped; reasoning = reasoningText });
+  };
+
+  func nowNat64() : Nat64 {
+    let t = Time.now();
+    if (t < 0) { 0 } else { (Int.abs(t) / 1_000_000_000).toNat64() };
+  };
+
+  func nowInt() : Int { Time.now() };
+
+  func botLatestPrices() : [(Text, Float)] {
+    switch (marketSnapshots.last()) {
+      case null [];
+      case (?snap) {
+        snap.markets.map<MarketTypes.MarketData, (Text, Float)>(func(m) { (m.symbol, m.price) });
+      };
+    };
+  };
+
+  func botMakeTradeId(now : Int, suffix : Text) : Text {
+    "t-" # now.toText() # "-" # suffix;
+  };
+
+  func botMakeDecisionId(cycle : Nat, symbol : Text) : Text {
+    "d-" # cycle.toText() # "-" # symbol;
+  };
+
+  // Fetch live market data and cache snapshot. Returns #err on failure.
+  func fetchLiveMarket() : async { #ok : Text; #err : Text } {
+    let headers : [OutCall.Header] = [
+      { name = "User-Agent"; value = "ApexAITrader/1.0" },
+      { name = "Accept";     value = "application/json" },
+    ];
+    let marketsUrl = "https://api.coingecko.com/api/v3/coins/markets" #
+      "?vs_currency=usd" #
+      "&ids=bitcoin,ethereum,binancecoin,solana,cardano,avalanche-2,chainlink,polkadot,uniswap,litecoin" #
+      "&order=market_cap_desc&per_page=10&page=1&sparkline=false&price_change_percentage=24h";
+    let marketsJson = try {
+      await OutCall.httpGetRequest(marketsUrl, headers, botTransform);
+    } catch (_) {
+      botState.value := { botState.value with dataFeedHealthy = false };
+      return #err("Failed to fetch live market data. Please try again.");
+    };
+    let markets = MarketLib.parseMarketDataResponse(marketsJson);
+    if (markets.size() == 0) {
+      botState.value := { botState.value with dataFeedHealthy = false };
+      return #err("Failed to fetch live market data. Please try again.");
+    };
+    let globalJson = try {
+      await OutCall.httpGetRequest("https://api.coingecko.com/api/v3/global", headers, botTransform);
+    } catch (_) { "" };
+    let (totalMcap, btcDom) = if (globalJson == "") {
+      (MarketLib.totalMarketCap(markets), 0.0);
+    } else {
+      MarketLib.parseGlobalData(globalJson);
+    };
+    let snap = MarketLib.buildSnapshot(markets, btcDom, totalMcap);
+    marketSnapshots.add(snap);
+    if (marketSnapshots.size() > 1440) {
+      let arr = marketSnapshots.toArray();
+      marketSnapshots.clear();
+      marketSnapshots.addAll(arr.values().drop(1));
+    };
+    let t = nowNat64();
+    botState.value := { botState.value with
+      lastDataFetchAt = ?t;
+      dataFeedHealthy = true;
+    };
+    #ok("Fetched " # markets.size().toText() # " assets");
+  };
+
+  func candlesForSymbol(symbol : Text) : [MarketTypes.Candle] {
+    // 1. Use stored OHLCV candles if available
+    switch (candleStore.get(symbol)) {
+      case (?stored) {
+        if (stored.size() >= 2) {
+          return stored.toArray();
+        };
+      };
+      case null {};
+    };
+    // 2. Fall back to price history from market snapshots (no fabrication)
+    let snaps = marketSnapshots.toArray();
+    snaps.filterMap(
+      func(snap) {
+        switch (snap.markets.find(func(m : MarketTypes.MarketData) : Bool { m.symbol == symbol })) {
+          case null null;
+          case (?m) {
+            let p = m.price;
+            ?{ open = p; high = p * 1.001; low = p * 0.999; close = p;
+               volume = m.volume24h / 1440.0; timestamp = snap.timestamp };
+          };
+        };
+      }
+    );
+  };
+
+  // ---------------------------------------------------------------------------
+  // Bot lifecycle API
+  // ---------------------------------------------------------------------------
+
+  public shared func startBot() : async { #ok : BotTypes.BotState; #err : Text } {
+    let cur = botState.value;
+    switch (cur.status) {
+      case (#Running) { return #err("Bot is already running") };
+      case _ {};
+    };
+    let newState = BotLib.startTransition(cur);
+    botState.value := newState;
+    aiState.mode := "paper";
+
+    switch (await fetchLiveMarket()) {
+      case (#err(msg)) {
+        botState.value := BotLib.stoppedState();
+        aiState.mode := "paper";
+        return #err(msg);
+      };
+      case (#ok(_)) {};
+    };
+
+    let cfg = botConfig.value;
+    let prices = botLatestPrices();
+    let initialPortfolio = PaperTrading.computePortfolio(trades, prices, cfg.startingBalance);
+    let initialSnap = BotLib.buildEquitySnapshot(initialPortfolio, dailyRealizedPnL.value, cfg.startingBalance);
+    equityHistory.add(initialSnap);
+
+    startBotTimers<system>();
+
+    #ok(botState.value);
+  };
+
+
+  public shared func pauseBot() : async BotTypes.BotState {
+    cancelBotTimers();
+    let newState = BotLib.pauseTransition(botState.value);
+    botState.value := newState;
+    aiState.mode := "paused";
+    newState;
+  };
+
+  public shared func resumeBot() : async BotTypes.BotState {
+    let newState = BotLib.resumeTransition(botState.value);
+    botState.value := newState;
+    aiState.mode := "paper";
+    startBotTimers<system>();
+    newState;
+  };
+
+  public shared func emergencyStopBot() : async BotTypes.BotState {
+    cancelBotTimers();
+    let newState = BotLib.emergencyStopTransition(botState.value);
+    botState.value := newState;
+    aiState.mode := "paused";
+    riskState.isPaused := true;
+    newState;
+  };
+
+  public shared func resetBot() : async BotTypes.BotState {
+    cancelBotTimers();
+    let cfg = botConfig.value;
+    trades.clear();
+    portfolio.value := {
+      totalValue = cfg.startingBalance;
+      cashBalance = cfg.startingBalance;
+      investedValue = 0.0;
+      totalPnl = 0.0;
+      totalPnlPercent = 0.0;
+      dayPnl = 0.0;
+      dayPnlPercent = 0.0;
+      winRate = 0.0;
+      totalTrades = 0;
+      winningTrades = 0;
+      positions = [];
+    };
+    decisionLogs.clear();
+    aiState.cycleCount := 0;
+    aiState.lastRunTime := 0;
+    aiState.nextRunTime := 0;
+    aiState.mode := "paper";
+    aiState.isRunning := false;
+    riskState.isPaused := false;
+    riskState.dailyLoss := 0.0;
+    riskState.dailyLossPercent := 0.0;
+    riskState.consecutiveLosses := 0;
+    riskState.riskScore := 0.0;
+    let ts = trainingState.value;
+    trainingState.value := { ts with
+      practiceTradesCount = 0;
+      overallWinRate = 0.0;
+      consecutiveLosses = 0;
+      overtradingCount = 0;
+    };
+    equityHistory.clear();
+    confidenceHist.clear();
+    simCosts.totalSlippage := 0.0;
+    simCosts.totalFees := 0.0;
+    simCosts.totalSpread := 0.0;
+    simCosts.tradeCount := 0;
+    dailyRealizedPnL.value := 0.0;
+    let newState = BotLib.resetTransition();
+    botState.value := newState;
+    newState;
+  };
+
+  public query func getBotState() : async BotTypes.BotState {
+    let s = botState.value;
+    { s with uptimeSeconds = BotLib.computeUptime(s.startedAt) };
+  };
+
+  public query func getBotConfig() : async BotTypes.BotConfig {
+    botConfig.value;
+  };
+
+  public shared func updateBotConfig(cfg : BotTypes.BotConfig) : async { #ok : BotTypes.BotConfig; #err : Text } {
+    switch (BotLib.validateConfig(cfg)) {
+      case (?err) { #err(err) };
+      case null {
+        botConfig.value := cfg;
+        #ok(cfg);
+      };
+    };
+  };
+
+  // ---------------------------------------------------------------------------
+  // Market data cycle
+  // ---------------------------------------------------------------------------
+
+  public shared func runMarketCycle() : async { #ok : Text; #err : Text } {
+    await fetchLiveMarket();
+  };
+
+  // Fetch OHLCV candles for a symbol from CoinGecko and store them.
+  // Replaces any previously stored candles for that symbol.
+  public shared func fetchAndStoreHistoricalCandles(symbol : Text, days : Nat) : async { #ok : Nat; #err : Text } {
+    let coinId = MarketLib.symbolToCoingeckoId(symbol);
+    let daysText = days.toText();
+    let url = "https://api.coingecko.com/api/v3/coins/" # coinId #
+      "/ohlc?vs_currency=usd&days=" # daysText;
+    let headers : [OutCall.Header] = [
+      { name = "User-Agent"; value = "ApexAITrader/1.0" },
+      { name = "Accept";     value = "application/json" },
+    ];
+    let json = try {
+      await OutCall.httpGetRequest(url, headers, botTransform);
+    } catch (_) {
+      return #err("Failed to fetch candles for " # symbol # ". Please try again.");
+    };
+    let candles = MarketLib.parseCandleResponse(json);
+    if (candles.size() == 0) {
+      return #err("No candle data returned for " # symbol);
+    };
+    let stored = List.empty<MarketTypes.Candle>();
+    stored.addAll(candles.values());
+    candleStore.add(symbol, stored);
+    #ok(candles.size());
+  };
+
+  // Return stored OHLCV candles for a given symbol (fetched via fetchAndStoreHistoricalCandles).
+  // Falls back to price-history candles derived from market snapshots.
+  public query func getMarketCandles(symbol : Text) : async [MarketTypes.Candle] {
+    candlesForSymbol(symbol);
+  };
+
+  public query func getDataFeedStatus() : async BotTypes.DataFeedStatus {
+    let bs = botState.value;
+    let stale : ?Nat64 = if (not bs.dataFeedHealthy) { bs.lastDataFetchAt } else { null };
+    let assetCount : Nat = switch (marketSnapshots.last()) {
+      case null 0;
+      case (?s) s.markets.size();
+    };
+    {
+      healthy     = bs.dataFeedHealthy;
+      lastFetchAt = bs.lastDataFetchAt;
+      assetCount;
+      staleSince  = stale;
+    };
+  };
+
+  // ---------------------------------------------------------------------------
+  // Autonomous decision cycle
+  // ---------------------------------------------------------------------------
+
+  public shared func runDecisionCycle() : async { #ok : { decisionsGenerated : Nat; tradesExecuted : Nat; positionsUpdated : Nat; skipped : Nat; reasoning : Text }; #err : Text } {
+    await runDecisionCycleInternal();
   };
 
   public query func getDecisionCycleStats() : async BotTypes.DecisionCycleStats {

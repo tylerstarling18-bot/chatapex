@@ -5,6 +5,7 @@ import {
   Bot,
   Brain,
   ChevronRight,
+  Cpu,
   Layers,
   LineChart,
   RefreshCw,
@@ -15,6 +16,7 @@ import type { ReactNode } from "react";
 import { cn } from "../lib/utils";
 
 export type Page =
+  | "simulator"
   | "dashboard"
   | "market"
   | "trading"
@@ -25,7 +27,18 @@ export type Page =
   | "risk"
   | "exchange";
 
-const NAV_ITEMS: { id: Page; label: string; icon: ReactNode }[] = [
+const NAV_ITEMS: {
+  id: Page;
+  label: string;
+  icon: ReactNode;
+  highlight?: boolean;
+}[] = [
+  {
+    id: "simulator",
+    label: "Simulator",
+    icon: <Cpu size={16} />,
+    highlight: true,
+  },
   { id: "dashboard", label: "Dashboard", icon: <Bot size={16} /> },
   { id: "market", label: "Market", icon: <BarChart2 size={16} /> },
   { id: "trading", label: "Trading", icon: <LineChart size={16} /> },
@@ -71,15 +84,23 @@ export function Sidebar({ page, onNavigate, paused }: SidebarProps) {
             key={item.id}
             type="button"
             onClick={() => onNavigate(item.id)}
+            data-ocid={`nav.${item.id}_link`}
             className={cn(
               "w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors text-left",
               page === item.id
                 ? "bg-violet-600/20 text-violet-300"
-                : "text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800",
+                : item.highlight
+                  ? "text-violet-400 hover:text-violet-300 hover:bg-violet-600/10"
+                  : "text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800",
             )}
           >
             {item.icon}
             {item.label}
+            {item.highlight && page !== item.id && (
+              <span className="ml-auto px-1.5 py-0.5 rounded text-xs bg-violet-600/20 text-violet-400 font-medium">
+                NEW
+              </span>
+            )}
             {page === item.id && <ChevronRight size={12} className="ml-auto" />}
           </button>
         ))}

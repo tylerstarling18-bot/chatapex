@@ -391,6 +391,7 @@ type TechnicalIndicators__879474365 =
     rsi : Float;
     trendStrength : Float
   };
+type TimerId__422952500 = Nat;
 type Timestamp__301639476 = Int;
 type TradeAction__178898485 = {#Buy; #Hold; #Sell; #Skip};
 type TradeDecision__577316000 =
@@ -508,6 +509,11 @@ actor {
     };
   stable botConfig : {var value : BotConfig__497733849};
   stable botState : {var value : BotState__604828795};
+  stable botTimerState :
+    {
+      var decisionTimerId : ?TimerId__422952500;
+      var marketTimerId : ?TimerId__422952500
+    };
   stable candleStore :
     {
       var root : Node__46230540<Text, List__415060402<Candle__823835442>>;

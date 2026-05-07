@@ -11563,13 +11563,13 @@ function shouldThrowError(throwOnError, params) {
   }
   return !!throwOnError;
 }
-function addConsumeAwareSignal(object2, getSignal, onCancelled) {
+function addConsumeAwareSignal(object2, getSignal2, onCancelled) {
   let consumed = false;
   let signal;
   Object.defineProperty(object2, "signal", {
     enumerable: true,
     get: () => {
-      signal ?? (signal = getSignal());
+      signal ?? (signal = getSignal2());
       if (consumed) {
         return signal;
       }
@@ -27533,7 +27533,7 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$l = [
+const __iconNode$q = [
   [
     "path",
     {
@@ -27542,14 +27542,31 @@ const __iconNode$l = [
     }
   ]
 ];
-const Activity = createLucideIcon("activity", __iconNode$l);
+const Activity = createLucideIcon("activity", __iconNode$q);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$k = [
+const __iconNode$p = [
+  [
+    "path",
+    {
+      d: "m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526",
+      key: "1yiouv"
+    }
+  ],
+  ["circle", { cx: "12", cy: "8", r: "6", key: "1vp47v" }]
+];
+const Award = createLucideIcon("award", __iconNode$p);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$o = [
   ["path", { d: "M12 8V4H8", key: "hb8ula" }],
   ["rect", { width: "16", height: "12", x: "4", y: "8", rx: "2", key: "enze0r" }],
   ["path", { d: "M2 14h2", key: "vft8re" }],
@@ -27557,14 +27574,14 @@ const __iconNode$k = [
   ["path", { d: "M15 13v2", key: "1xurst" }],
   ["path", { d: "M9 13v2", key: "rq6x2g" }]
 ];
-const Bot = createLucideIcon("bot", __iconNode$k);
+const Bot = createLucideIcon("bot", __iconNode$o);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$j = [
+const __iconNode$n = [
   [
     "path",
     {
@@ -27587,18 +27604,54 @@ const __iconNode$j = [
   ["path", { d: "M6 18a4 4 0 0 1-1.967-.516", key: "2e4loj" }],
   ["path", { d: "M19.967 17.484A4 4 0 0 1 18 18", key: "159ez6" }]
 ];
-const Brain = createLucideIcon("brain", __iconNode$j);
+const Brain = createLucideIcon("brain", __iconNode$n);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$i = [
+const __iconNode$m = [
   ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
   ["path", { d: "m19 9-5 5-4-4-3 3", key: "2osh9i" }]
 ];
-const ChartLine = createLucideIcon("chart-line", __iconNode$i);
+const ChartLine = createLucideIcon("chart-line", __iconNode$m);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$l = [
+  ["line", { x1: "18", x2: "18", y1: "20", y2: "10", key: "1xfpm4" }],
+  ["line", { x1: "12", x2: "12", y1: "20", y2: "4", key: "be30l9" }],
+  ["line", { x1: "6", x2: "6", y1: "20", y2: "14", key: "1r4le6" }]
+];
+const ChartNoAxesColumn = createLucideIcon("chart-no-axes-column", __iconNode$l);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$k = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$k);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$j = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$j);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$i = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$i);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -27606,19 +27659,21 @@ const ChartLine = createLucideIcon("chart-line", __iconNode$i);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$h = [
-  ["line", { x1: "18", x2: "18", y1: "20", y2: "10", key: "1xfpm4" }],
-  ["line", { x1: "12", x2: "12", y1: "20", y2: "4", key: "be30l9" }],
-  ["line", { x1: "6", x2: "6", y1: "20", y2: "14", key: "1r4le6" }]
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
 ];
-const ChartNoAxesColumn = createLucideIcon("chart-no-axes-column", __iconNode$h);
+const CircleCheck = createLucideIcon("circle-check", __iconNode$h);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$g = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$g);
+const __iconNode$g = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["polygon", { points: "10 8 16 12 10 16 10 8", key: "1cimsy" }]
+];
+const CirclePlay = createLucideIcon("circle-play", __iconNode$g);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -27627,9 +27682,9 @@ const ChevronRight = createLucideIcon("chevron-right", __iconNode$g);
  */
 const __iconNode$f = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+  ["rect", { x: "9", y: "9", width: "6", height: "6", rx: "1", key: "1ssd4o" }]
 ];
-const CircleCheck = createLucideIcon("circle-check", __iconNode$f);
+const CircleStop = createLucideIcon("circle-stop", __iconNode$f);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -27638,9 +27693,10 @@ const CircleCheck = createLucideIcon("circle-check", __iconNode$f);
  */
 const __iconNode$e = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["rect", { x: "9", y: "9", width: "6", height: "6", rx: "1", key: "1ssd4o" }]
+  ["path", { d: "m15 9-6 6", key: "1uzhvr" }],
+  ["path", { d: "m9 9 6 6", key: "z0biqf" }]
 ];
-const CircleStop = createLucideIcon("circle-stop", __iconNode$e);
+const CircleX = createLucideIcon("circle-x", __iconNode$e);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -27648,18 +27704,6 @@ const CircleStop = createLucideIcon("circle-stop", __iconNode$e);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$d = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "m15 9-6 6", key: "1uzhvr" }],
-  ["path", { d: "m9 9 6 6", key: "z0biqf" }]
-];
-const CircleX = createLucideIcon("circle-x", __iconNode$d);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$c = [
   ["path", { d: "M12 20v2", key: "1lh1kg" }],
   ["path", { d: "M12 2v2", key: "tus03m" }],
   ["path", { d: "M17 20v2", key: "1rnc9c" }],
@@ -27675,7 +27719,19 @@ const __iconNode$c = [
   ["rect", { x: "4", y: "4", width: "16", height: "16", rx: "2", key: "1vbyd7" }],
   ["rect", { x: "8", y: "8", width: "8", height: "8", rx: "1", key: "z9xiuo" }]
 ];
-const Cpu = createLucideIcon("cpu", __iconNode$c);
+const Cpu = createLucideIcon("cpu", __iconNode$d);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$c = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M12 16v-4", key: "1dtifu" }],
+  ["path", { d: "M12 8h.01", key: "e9boi3" }]
+];
+const Info = createLucideIcon("info", __iconNode$c);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -27683,18 +27739,6 @@ const Cpu = createLucideIcon("cpu", __iconNode$c);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$b = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "M12 16v-4", key: "1dtifu" }],
-  ["path", { d: "M12 8h.01", key: "e9boi3" }]
-];
-const Info = createLucideIcon("info", __iconNode$b);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$a = [
   [
     "path",
     {
@@ -27717,34 +27761,47 @@ const __iconNode$a = [
     }
   ]
 ];
-const Layers = createLucideIcon("layers", __iconNode$a);
+const Layers = createLucideIcon("layers", __iconNode$b);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$9 = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$9);
+const __iconNode$a = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$a);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$8 = [
+const __iconNode$9 = [
   ["rect", { x: "14", y: "4", width: "4", height: "16", rx: "1", key: "zuxfzm" }],
   ["rect", { x: "6", y: "4", width: "4", height: "16", rx: "1", key: "1okwgv" }]
 ];
-const Pause = createLucideIcon("pause", __iconNode$8);
+const Pause = createLucideIcon("pause", __iconNode$9);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$7 = [["polygon", { points: "6 3 20 12 6 21 6 3", key: "1oa8hb" }]];
-const Play = createLucideIcon("play", __iconNode$7);
+const __iconNode$8 = [["polygon", { points: "6 3 20 12 6 21 6 3", key: "1oa8hb" }]];
+const Play = createLucideIcon("play", __iconNode$8);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$7 = [
+  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
+  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
+  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
+  ["path", { d: "M8 16H3v5", key: "1cv678" }]
+];
+const RefreshCw = createLucideIcon("refresh-cw", __iconNode$7);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -27752,19 +27809,6 @@ const Play = createLucideIcon("play", __iconNode$7);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$6 = [
-  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
-  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
-  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
-  ["path", { d: "M8 16H3v5", key: "1cv678" }]
-];
-const RefreshCw = createLucideIcon("refresh-cw", __iconNode$6);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$5 = [
   [
     "path",
     {
@@ -27773,7 +27817,18 @@ const __iconNode$5 = [
     }
   ]
 ];
-const Shield = createLucideIcon("shield", __iconNode$5);
+const Shield = createLucideIcon("shield", __iconNode$6);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$5 = [
+  ["path", { d: "M16 17h6v-6", key: "t6n2it" }],
+  ["path", { d: "m22 17-8.5-8.5-5 5L2 7", key: "x473p" }]
+];
+const TrendingDown = createLucideIcon("trending-down", __iconNode$5);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -30324,6 +30379,12 @@ function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 const NAV_ITEMS = [
+  {
+    id: "simulator",
+    label: "Simulator",
+    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Cpu, { size: 16 }),
+    highlight: true
+  },
   { id: "dashboard", label: "Dashboard", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Bot, { size: 16 }) },
   { id: "market", label: "Market", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(ChartNoAxesColumn, { size: 16 }) },
   { id: "trading", label: "Trading", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(ChartLine, { size: 16 }) },
@@ -30352,13 +30413,15 @@ function Sidebar({ page, onNavigate, paused }) {
       {
         type: "button",
         onClick: () => onNavigate(item.id),
+        "data-ocid": `nav.${item.id}_link`,
         className: cn(
           "w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors text-left",
-          page === item.id ? "bg-violet-600/20 text-violet-300" : "text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800"
+          page === item.id ? "bg-violet-600/20 text-violet-300" : item.highlight ? "text-violet-400 hover:text-violet-300 hover:bg-violet-600/10" : "text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800"
         ),
         children: [
           item.icon,
           item.label,
+          item.highlight && page !== item.id && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "ml-auto px-1.5 py-0.5 rounded text-xs bg-violet-600/20 text-violet-400 font-medium", children: "NEW" }),
           page === item.id && /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { size: 12, className: "ml-auto" })
         ]
       },
@@ -34036,7 +34099,7 @@ function regimeBadgeClass(c2) {
   };
   return map2[c2] ?? "bg-zinc-800 text-zinc-400";
 }
-const SYMBOLS$1 = ["BTC", "ETH", "BNB", "SOL", "ADA"];
+const SYMBOLS$2 = ["BTC", "ETH", "BNB", "SOL", "ADA"];
 function ArenaPage() {
   const { data: sessions, isLoading } = useArenaSessions();
   const startArena = useStartArena();
@@ -34086,7 +34149,7 @@ function ArenaPage() {
               onChange: (e3) => setForm((f2) => ({ ...f2, symbol: e3.target.value })),
               className: "w-full rounded-lg bg-zinc-800 border border-zinc-700 px-3 py-1.5 text-sm text-zinc-200",
               id: "arenaSymbol",
-              children: SYMBOLS$1.map((s2) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: s2, children: s2 }, s2))
+              children: SYMBOLS$2.map((s2) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: s2, children: s2 }, s2))
             }
           )
         ] }),
@@ -55921,7 +55984,7 @@ function useStartBacktest() {
     onSettled: () => qc.invalidateQueries({ queryKey: ["backtestSessions"] })
   });
 }
-const SYMBOLS = [
+const SYMBOLS$1 = [
   "BTC",
   "ETH",
   "BNB",
@@ -56069,7 +56132,7 @@ function BacktestPage() {
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-zinc-500 block mb-2", children: "Symbols" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-2", children: SYMBOLS.map((s2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-2", children: SYMBOLS$1.map((s2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
           "button",
           {
             type: "button",
@@ -57665,6 +57728,1040 @@ function RiskPage() {
     ] })
   ] });
 }
+function ema(values, period) {
+  const k2 = 2 / (period + 1);
+  const result = [];
+  let prev = values.slice(0, period).reduce((a2, b2) => a2 + b2, 0) / period;
+  for (let i = 0; i < period - 1; i++) result.push(prev);
+  for (let i = period - 1; i < values.length; i++) {
+    prev = values[i] * k2 + prev * (1 - k2);
+    result.push(prev);
+  }
+  return result;
+}
+function rsi(closes, period = 14) {
+  const gains = [];
+  const losses = [];
+  for (let i = 1; i < closes.length; i++) {
+    const diff = closes[i] - closes[i - 1];
+    gains.push(diff > 0 ? diff : 0);
+    losses.push(diff < 0 ? -diff : 0);
+  }
+  const result = new Array(period).fill(50);
+  let avgGain = gains.slice(0, period).reduce((a2, b2) => a2 + b2, 0) / period;
+  let avgLoss = losses.slice(0, period).reduce((a2, b2) => a2 + b2, 0) / period;
+  for (let i = period; i < gains.length; i++) {
+    avgGain = (avgGain * (period - 1) + gains[i]) / period;
+    avgLoss = (avgLoss * (period - 1) + losses[i]) / period;
+    const rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
+    result.push(100 - 100 / (1 + rs));
+  }
+  return result;
+}
+function atr(candles, period = 14) {
+  const trs = [candles[0].high - candles[0].low];
+  for (let i = 1; i < candles.length; i++) {
+    const c2 = candles[i];
+    const prev = candles[i - 1].close;
+    trs.push(
+      Math.max(c2.high - c2.low, Math.abs(c2.high - prev), Math.abs(c2.low - prev))
+    );
+  }
+  const result = new Array(period).fill(trs[0]);
+  let avg = trs.slice(0, period).reduce((a2, b2) => a2 + b2, 0) / period;
+  for (let i = period; i < trs.length; i++) {
+    avg = (avg * (period - 1) + trs[i]) / period;
+    result.push(avg);
+  }
+  return result;
+}
+function bollingerBands(closes, period = 20, stdDev = 2) {
+  const mid = [];
+  const upper = [];
+  const lower = [];
+  for (let i = 0; i < closes.length; i++) {
+    if (i < period - 1) {
+      mid.push(closes[i]);
+      upper.push(closes[i]);
+      lower.push(closes[i]);
+      continue;
+    }
+    const slice = closes.slice(i - period + 1, i + 1);
+    const mean = slice.reduce((a2, b2) => a2 + b2, 0) / period;
+    const variance = slice.reduce((a2, b2) => a2 + (b2 - mean) ** 2, 0) / period;
+    const std = Math.sqrt(variance);
+    mid.push(mean);
+    upper.push(mean + stdDev * std);
+    lower.push(mean - stdDev * std);
+  }
+  return { mid, upper, lower };
+}
+function computeIndicators(candles) {
+  const closes = candles.map((c2) => c2.close);
+  const ema20s = ema(closes, 20);
+  const ema50s = ema(closes, 50);
+  const ema12s = ema(closes, 12);
+  const ema26s = ema(closes, 26);
+  const rsiVals = rsi(closes, 14);
+  const atrVals = atr(candles, 14);
+  const bb = bollingerBands(closes, 20);
+  return candles.map((_2, i) => {
+    const macdLine = ema12s[i] - ema26s[i];
+    const signalLine = i >= 9 ? ema(
+      closes.slice(0, i + 1).map((_22, j2) => ema12s[j2] - ema26s[j2]),
+      9
+    ).slice(-1)[0] : 0;
+    return {
+      rsi: rsiVals[i] ?? 50,
+      macd: macdLine,
+      macdSignal: signalLine,
+      ema20: ema20s[i],
+      ema50: ema50s[i],
+      atr: atrVals[i],
+      bollingerUpper: bb.upper[i],
+      bollingerMid: bb.mid[i],
+      bollingerLower: bb.lower[i],
+      momentum: i >= 10 ? (closes[i] / closes[i - 10] - 1) * 100 : 0
+    };
+  });
+}
+function trendFollowingSignal(ind) {
+  const bullish = ind.ema20 > ind.ema50 && ind.rsi > 50 && ind.rsi < 70 && ind.macd > ind.macdSignal;
+  const bearish = ind.ema20 < ind.ema50 && ind.rsi < 50 && ind.rsi > 30 && ind.macd < ind.macdSignal;
+  if (bullish) {
+    const conf = Math.min(
+      95,
+      55 + (ind.rsi - 50) * 0.8 + (ind.momentum > 0 ? 5 : 0)
+    );
+    return {
+      action: "BUY",
+      confidence: conf,
+      reason: "EMA cross + MACD bullish"
+    };
+  }
+  if (bearish) {
+    const conf = Math.min(95, 55 + (50 - ind.rsi) * 0.8);
+    return {
+      action: "SELL",
+      confidence: conf,
+      reason: "EMA cross + MACD bearish"
+    };
+  }
+  return { action: "HOLD", confidence: 40, reason: "No trend signal" };
+}
+function meanReversionSignal(ind) {
+  const oversold = ind.rsi < 30 && ind.bollingerLower > 0;
+  const overbought = ind.rsi > 70;
+  if (oversold) {
+    const conf = Math.min(95, 60 + (30 - ind.rsi) * 1.2);
+    return {
+      action: "BUY",
+      confidence: conf,
+      reason: "RSI oversold + Bollinger bounce"
+    };
+  }
+  if (overbought) {
+    const conf = Math.min(95, 60 + (ind.rsi - 70) * 1.2);
+    return {
+      action: "SELL",
+      confidence: conf,
+      reason: "RSI overbought + Bollinger upper"
+    };
+  }
+  return { action: "HOLD", confidence: 35, reason: "Price in mid-band" };
+}
+function scalpingSignal(ind) {
+  const momentumBuy = ind.momentum > 1.5 && ind.rsi > 45 && ind.rsi < 65;
+  const momentumSell = ind.momentum < -1.5 && ind.rsi > 35 && ind.rsi < 55;
+  if (momentumBuy) {
+    return { action: "BUY", confidence: 62, reason: "Short momentum burst" };
+  }
+  if (momentumSell) {
+    return {
+      action: "SELL",
+      confidence: 62,
+      reason: "Negative momentum scalp"
+    };
+  }
+  return { action: "HOLD", confidence: 30, reason: "No scalp setup" };
+}
+function defensiveSignal(ind) {
+  const safeEntry = ind.rsi > 40 && ind.rsi < 60 && ind.atr < ind.bollingerMid * 0.03;
+  if (safeEntry && ind.macd > 0) {
+    return { action: "BUY", confidence: 58, reason: "Low volatility buy" };
+  }
+  return {
+    action: "HOLD",
+    confidence: 50,
+    reason: "Waiting for low-vol entry"
+  };
+}
+function momentumSignal(ind) {
+  const strongBull = ind.momentum > 3 && ind.macd > ind.macdSignal && ind.rsi < 75;
+  const strongBear = ind.momentum < -3 && ind.macd < ind.macdSignal && ind.rsi > 25;
+  if (strongBull) {
+    const conf = Math.min(95, 65 + ind.momentum * 2);
+    return {
+      action: "BUY",
+      confidence: conf,
+      reason: "Strong positive momentum"
+    };
+  }
+  if (strongBear) {
+    const conf = Math.min(95, 65 + Math.abs(ind.momentum) * 2);
+    return {
+      action: "SELL",
+      confidence: conf,
+      reason: "Strong negative momentum"
+    };
+  }
+  return { action: "HOLD", confidence: 38, reason: "Momentum below threshold" };
+}
+function getSignal(strategy, ind) {
+  switch (strategy) {
+    case "TrendFollowing":
+      return trendFollowingSignal(ind);
+    case "MeanReversion":
+      return meanReversionSignal(ind);
+    case "Scalping":
+      return scalpingSignal(ind);
+    case "Defensive":
+      return defensiveSignal(ind);
+    case "Momentum":
+      return momentumSignal(ind);
+  }
+}
+function makeId() {
+  return Math.random().toString(36).slice(2, 10);
+}
+function applySlippage(price, action, slippagePct) {
+  const slip = price * (slippagePct / 100);
+  return action === "BUY" ? price + slip : price - slip;
+}
+function runAgentSimulation(candles, strategy, config2) {
+  var _a3;
+  const indicators = computeIndicators(candles);
+  const agentId = `${strategy}-Agent`;
+  const agent = {
+    id: agentId,
+    strategy,
+    balance: config2.initialBalance,
+    equity: config2.initialBalance,
+    positions: /* @__PURE__ */ new Map(),
+    trades: [],
+    wins: 0,
+    losses: 0,
+    maxDrawdown: 0,
+    peakEquity: config2.initialBalance,
+    equityCurve: [
+      { time: ((_a3 = candles[0]) == null ? void 0 : _a3.timestamp) ?? 0, value: config2.initialBalance }
+    ],
+    rejectedTrades: []
+  };
+  const CONFIDENCE_THRESHOLD = strategy === "Defensive" ? 55 : 60;
+  for (let i = 50; i < candles.length; i++) {
+    const candle = candles[i];
+    const ind = indicators[i];
+    const price = candle.close;
+    for (const [sym, pos] of agent.positions) {
+      const currentPrice = price;
+      if (currentPrice <= pos.stopLoss) {
+        const exitPrice = applySlippage(
+          pos.stopLoss,
+          "SELL",
+          config2.slippagePct
+        );
+        const fee = exitPrice * pos.quantity * (config2.feePct / 100);
+        const pnl = (exitPrice - pos.entryPrice) * pos.quantity - fee;
+        pos.exitPrice = exitPrice;
+        pos.exitTime = candle.timestamp;
+        pos.pnl = pnl;
+        pos.pnlPct = pnl / (pos.entryPrice * pos.quantity) * 100;
+        pos.status = "stopped";
+        agent.balance += exitPrice * pos.quantity - fee;
+        if (pnl < 0) agent.losses++;
+        else agent.wins++;
+        agent.trades.push({ ...pos });
+        agent.positions.delete(sym);
+        continue;
+      }
+      if (currentPrice >= pos.takeProfit) {
+        const exitPrice = applySlippage(
+          pos.takeProfit,
+          "SELL",
+          config2.slippagePct
+        );
+        const fee = exitPrice * pos.quantity * (config2.feePct / 100);
+        const pnl = (exitPrice - pos.entryPrice) * pos.quantity - fee;
+        pos.exitPrice = exitPrice;
+        pos.exitTime = candle.timestamp;
+        pos.pnl = pnl;
+        pos.pnlPct = pnl / (pos.entryPrice * pos.quantity) * 100;
+        pos.status = "target_hit";
+        agent.balance += exitPrice * pos.quantity - fee;
+        agent.wins++;
+        agent.trades.push({ ...pos });
+        agent.positions.delete(sym);
+        continue;
+      }
+      const unrealized = (currentPrice - pos.entryPrice) * pos.quantity;
+      agent.equity = agent.balance + unrealized;
+    }
+    agent.equity = agent.balance;
+    for (const pos of agent.positions.values()) {
+      agent.equity += (price - pos.entryPrice) * pos.quantity;
+    }
+    if (agent.equity > agent.peakEquity) agent.peakEquity = agent.equity;
+    const drawdown = (agent.peakEquity - agent.equity) / agent.peakEquity * 100;
+    if (drawdown > agent.maxDrawdown) agent.maxDrawdown = drawdown;
+    agent.equityCurve.push({ time: candle.timestamp, value: agent.equity });
+    const signal = getSignal(strategy, ind);
+    if (signal.action === "HOLD" || signal.confidence < CONFIDENCE_THRESHOLD)
+      continue;
+    if (agent.positions.has(config2.symbol)) continue;
+    if (signal.action === "BUY") {
+      const maxAlloc = agent.balance * (config2.maxPositionSizePct / 100);
+      const entryPrice = applySlippage(price, "BUY", config2.slippagePct);
+      const fee = entryPrice * (config2.feePct / 100);
+      const cost = entryPrice + fee;
+      if (maxAlloc < cost * 0.01) {
+        agent.rejectedTrades.push({
+          id: makeId(),
+          agentId,
+          symbol: config2.symbol,
+          action: "BUY",
+          entryPrice: price,
+          quantity: 0,
+          entryTime: candle.timestamp,
+          stopLoss: 0,
+          takeProfit: 0,
+          status: "rejected",
+          rejectReason: "Insufficient balance",
+          indicators: ind,
+          confidence: signal.confidence
+        });
+        continue;
+      }
+      const quantity = maxAlloc / cost;
+      const stopLoss = entryPrice - ind.atr * 2;
+      const takeProfit = entryPrice + ind.atr * 3;
+      agent.balance -= entryPrice * quantity + fee * quantity;
+      const trade = {
+        id: makeId(),
+        agentId,
+        symbol: config2.symbol,
+        action: "BUY",
+        entryPrice,
+        quantity,
+        entryTime: candle.timestamp,
+        stopLoss,
+        takeProfit,
+        status: "open",
+        indicators: ind,
+        confidence: signal.confidence
+      };
+      agent.positions.set(config2.symbol, trade);
+    }
+  }
+  const lastCandle = candles[candles.length - 1];
+  for (const [sym, pos] of agent.positions) {
+    const exitPrice = applySlippage(
+      lastCandle.close,
+      "SELL",
+      config2.slippagePct
+    );
+    const fee = exitPrice * pos.quantity * (config2.feePct / 100);
+    const pnl = (exitPrice - pos.entryPrice) * pos.quantity - fee;
+    pos.exitPrice = exitPrice;
+    pos.exitTime = lastCandle.timestamp;
+    pos.pnl = pnl;
+    pos.pnlPct = pnl / (pos.entryPrice * pos.quantity) * 100;
+    pos.status = "closed";
+    agent.balance += exitPrice * pos.quantity - fee;
+    if (pnl < 0) agent.losses++;
+    else agent.wins++;
+    agent.trades.push({ ...pos });
+    agent.positions.delete(sym);
+  }
+  agent.equity = agent.balance;
+  const totalTrades = agent.trades.length;
+  const winRate = totalTrades > 0 ? agent.wins / totalTrades : 0;
+  const totalReturn = (agent.equity - config2.initialBalance) / config2.initialBalance * 100;
+  const returns = agent.trades.filter((t2) => t2.pnl !== void 0).map((t2) => t2.pnlPct ?? 0);
+  const avgReturn = returns.length > 0 ? returns.reduce((a2, b2) => a2 + b2, 0) / returns.length : 0;
+  const stdReturn = returns.length > 1 ? Math.sqrt(
+    returns.reduce((a2, b2) => a2 + (b2 - avgReturn) ** 2, 0) / (returns.length - 1)
+  ) : 1;
+  const sharpeRatio = stdReturn > 0 ? avgReturn / stdReturn * Math.sqrt(252) : 0;
+  return {
+    agent,
+    totalReturn,
+    winRate,
+    sharpeRatio,
+    maxDrawdown: agent.maxDrawdown,
+    totalTrades,
+    rejectedCount: agent.rejectedTrades.length
+  };
+}
+function runMultiAgentSimulation(candles, config2) {
+  const strategies = [
+    "TrendFollowing",
+    "MeanReversion",
+    "Scalping",
+    "Defensive",
+    "Momentum"
+  ];
+  const results = strategies.map((s2) => runAgentSimulation(candles, s2, config2));
+  return results.sort((a2, b2) => b2.totalReturn - a2.totalReturn);
+}
+function generateSyntheticCandles(_symbol, days = 180, startPrice = 45e3) {
+  const candles = [];
+  let price = startPrice;
+  const now2 = Date.now();
+  const msPerDay = 864e5;
+  let trend = 3e-4;
+  for (let i = days; i >= 0; i--) {
+    const t2 = now2 - i * msPerDay;
+    const dailyVol = 0.025 + Math.random() * 0.02;
+    const change = (Math.random() - 0.495) * dailyVol * 2 + trend;
+    price = Math.max(price * (1 + change), startPrice * 0.3);
+    if (Math.random() < 0.05) trend = (Math.random() - 0.5) * 1e-3;
+    const range3 = price * dailyVol;
+    const open = price * (1 + (Math.random() - 0.5) * 5e-3);
+    const high = Math.max(open, price) + Math.random() * range3 * 0.5;
+    const low = Math.min(open, price) - Math.random() * range3 * 0.5;
+    const volume = 1e8 + Math.random() * 5e8;
+    candles.push({
+      timestamp: t2,
+      open,
+      high,
+      low,
+      close: price,
+      volume
+    });
+  }
+  return candles;
+}
+const SYMBOLS = ["BTC", "ETH", "SOL", "BNB", "ADA"];
+const STRATEGY_COLORS = {
+  TrendFollowing: "#7c3aed",
+  MeanReversion: "#0ea5e9",
+  Scalping: "#f59e0b",
+  Defensive: "#10b981",
+  Momentum: "#f43f5e"
+};
+const STRATEGY_DESC = {
+  TrendFollowing: "EMA crossover + MACD alignment",
+  MeanReversion: "RSI extremes + Bollinger band touch",
+  Scalping: "Short momentum bursts, quick exits",
+  Defensive: "Low-volatility selective entries",
+  Momentum: "Strong momentum confirmation"
+};
+function RankBadge({ rank }) {
+  const styles2 = [
+    "bg-yellow-500/20 text-yellow-300 border border-yellow-500/40",
+    "bg-zinc-400/20 text-zinc-300 border border-zinc-500/40",
+    "bg-orange-700/20 text-orange-400 border border-orange-600/40"
+  ];
+  const emojis = ["🥇", "🥈", "🥉"];
+  const cls = rank <= 3 ? styles2[rank - 1] : "bg-zinc-800 text-zinc-500 border border-zinc-700";
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "span",
+    {
+      className: `inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold ${cls}`,
+      children: rank <= 3 ? emojis[rank - 1] : `#${rank}`
+    }
+  );
+}
+function TradeRow({ trade, idx }) {
+  const [expanded, setExpanded] = reactExports.useState(false);
+  const pnl = trade.pnl ?? 0;
+  const isRejected = trade.status === "rejected";
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "tr",
+      {
+        className: `border-b border-zinc-800/40 text-xs cursor-pointer ${isRejected ? "opacity-60" : "hover:bg-zinc-800/20"}`,
+        onClick: () => setExpanded((e3) => !e3),
+        onKeyDown: (e3) => (e3.key === "Enter" || e3.key === " ") && setExpanded((ex) => !ex),
+        tabIndex: 0,
+        "data-ocid": `simulator.trade_log.item.${idx + 1}`,
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3 text-zinc-500 font-mono", children: idx + 1 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "span",
+            {
+              className: `inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium ${isRejected ? "bg-zinc-700 text-zinc-500" : trade.action === "BUY" ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400"}`,
+              children: isRejected ? "REJECTED" : trade.action
+            }
+          ) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3 text-zinc-300 font-mono", children: fmtUSD(trade.entryPrice) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3 text-zinc-400 font-mono", children: trade.exitPrice != null ? fmtUSD(trade.exitPrice) : "open" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: `py-2 px-3 font-medium ${pctColor(pnl)}`, children: trade.pnl != null ? fmtUSD(trade.pnl) : isRejected ? "—" : "open" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-2 px-3 text-zinc-400", children: [
+            trade.confidence.toFixed(0),
+            "%"
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3 text-zinc-500", children: expanded ? /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronUp, { size: 12 }) : /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { size: 12 }) })
+        ]
+      }
+    ),
+    expanded && /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { className: "border-b border-zinc-800/40 bg-zinc-950", children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { colSpan: 7, className: "px-3 py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-3 gap-4 text-xs text-zinc-500", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-zinc-600 mb-0.5", children: "Indicators" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+          "RSI:",
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-zinc-300", children: trade.indicators.rsi.toFixed(1) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+          "MACD:",
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-zinc-300", children: trade.indicators.macd.toFixed(4) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+          "EMA20:",
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-zinc-300", children: fmtUSD(trade.indicators.ema20) })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-zinc-600 mb-0.5", children: "Risk Levels" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+          "Stop Loss:",
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-400", children: fmtUSD(trade.stopLoss) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+          "Take Profit:",
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-400", children: fmtUSD(trade.takeProfit) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+          "ATR:",
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-zinc-300", children: trade.indicators.atr.toFixed(2) })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-zinc-600 mb-0.5", children: "Trade Info" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+          "Status:",
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-zinc-300 capitalize", children: trade.status.replace("_", " ") })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+          "Qty:",
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-zinc-300", children: trade.quantity.toFixed(6) })
+        ] }),
+        isRejected && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+          "Reason:",
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-400", children: trade.rejectReason })
+        ] })
+      ] })
+    ] }) }) })
+  ] });
+}
+function SimulatorPage() {
+  var _a3, _b3, _c2, _d2, _e2, _f2;
+  const [symbol, setSymbol] = reactExports.useState("BTC");
+  const [days, setDays] = reactExports.useState(180);
+  const [initialBalance, setInitialBalance] = reactExports.useState(1e4);
+  const [isRunning, setIsRunning] = reactExports.useState(false);
+  const [results, setResults] = reactExports.useState(null);
+  const [selectedAgent, setSelectedAgent] = reactExports.useState(null);
+  const [tradeTab, setTradeTab] = reactExports.useState("trades");
+  const candles = reactExports.useRef([]);
+  const runSimulation = reactExports.useCallback(async () => {
+    var _a4;
+    setIsRunning(true);
+    setResults(null);
+    setSelectedAgent(null);
+    await new Promise((r2) => setTimeout(r2, 50));
+    const startPrice = symbol === "BTC" ? 45e3 : symbol === "ETH" ? 2500 : symbol === "SOL" ? 100 : symbol === "BNB" ? 300 : 0.5;
+    const syntheticCandles = generateSyntheticCandles(symbol, days, startPrice);
+    candles.current = syntheticCandles;
+    const simResults = runMultiAgentSimulation(syntheticCandles, {
+      symbol,
+      initialBalance,
+      endIndex: syntheticCandles.length - 1,
+      slippagePct: 0.05,
+      feePct: 0.1,
+      maxPositionSizePct: 95
+    });
+    setResults(simResults);
+    setSelectedAgent(((_a4 = simResults[0]) == null ? void 0 : _a4.agent.id) ?? null);
+    setIsRunning(false);
+  }, [symbol, days, initialBalance]);
+  const selectedResult = reactExports.useMemo(
+    () => (results == null ? void 0 : results.find((r2) => r2.agent.id === selectedAgent)) ?? null,
+    [results, selectedAgent]
+  );
+  const equityChartData = reactExports.useMemo(() => {
+    if (!results) return [];
+    const timeSet = /* @__PURE__ */ new Set();
+    for (const r2 of results) {
+      for (const pt of r2.agent.equityCurve) timeSet.add(pt.time);
+    }
+    const times = [...timeSet].sort((a2, b2) => a2 - b2);
+    return times.map((t2) => {
+      const point2 = { t: t2 };
+      for (const r2 of results) {
+        const pt = r2.agent.equityCurve.findLast((p2) => p2.time <= t2);
+        if (pt) point2[r2.agent.strategy] = pt.value;
+      }
+      return point2;
+    });
+  }, [results]);
+  const activeTrades = (selectedResult == null ? void 0 : selectedResult.agent.trades.filter((t2) => t2.status !== "rejected")) ?? [];
+  const rejectedTrades = (selectedResult == null ? void 0 : selectedResult.agent.rejectedTrades) ?? [];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-6", "data-ocid": "simulator.page", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      SectionHeader,
+      {
+        title: "Multi-Agent Simulator",
+        description: "Run 5 AI strategy agents simultaneously and compare performance",
+        actions: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Button,
+          {
+            onClick: runSimulation,
+            loading: isRunning,
+            "data-ocid": "simulator.run_button",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(CirclePlay, { size: 14 }),
+              isRunning ? "Simulating…" : "Run Simulation"
+            ]
+          }
+        )
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "rounded-xl border border-zinc-800 bg-zinc-900 p-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-semibold text-zinc-200 mb-3", children: "Simulation Config" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap gap-4 items-end", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "label",
+            {
+              htmlFor: "simSymbol",
+              className: "text-xs text-zinc-500 block mb-1",
+              children: "Symbol"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "select",
+            {
+              id: "simSymbol",
+              value: symbol,
+              onChange: (e3) => setSymbol(e3.target.value),
+              className: "rounded-lg bg-zinc-800 border border-zinc-700 px-3 py-1.5 text-sm text-zinc-200",
+              "data-ocid": "simulator.symbol_select",
+              children: SYMBOLS.map((s2) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: s2, children: s2 }, s2))
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "label",
+            {
+              htmlFor: "simDays",
+              className: "text-xs text-zinc-500 block mb-1",
+              children: "Days of History"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "select",
+            {
+              id: "simDays",
+              value: days,
+              onChange: (e3) => setDays(Number(e3.target.value)),
+              className: "rounded-lg bg-zinc-800 border border-zinc-700 px-3 py-1.5 text-sm text-zinc-200",
+              "data-ocid": "simulator.days_select",
+              children: [30, 60, 90, 180, 365].map((d2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("option", { value: d2, children: [
+                d2,
+                " days"
+              ] }, d2))
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "label",
+            {
+              htmlFor: "simBalance",
+              className: "text-xs text-zinc-500 block mb-1",
+              children: "Initial Balance (USD)"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              id: "simBalance",
+              type: "number",
+              value: initialBalance,
+              onChange: (e3) => setInitialBalance(Number(e3.target.value)),
+              className: "w-32 rounded-lg bg-zinc-800 border border-zinc-700 px-3 py-1.5 text-sm text-zinc-200",
+              "data-ocid": "simulator.balance_input"
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Button,
+          {
+            onClick: runSimulation,
+            loading: isRunning,
+            variant: "secondary",
+            size: "sm",
+            "data-ocid": "simulator.run_button_2",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { size: 12 }),
+              isRunning ? "Running…" : "Re-run"
+            ]
+          }
+        )
+      ] })
+    ] }),
+    !results && !isRunning && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "flex flex-col items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900 py-20 space-y-3",
+        "data-ocid": "simulator.empty_state",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(ChartNoAxesColumn, { size: 40, className: "text-zinc-700" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-zinc-500 text-sm", children: 'Click "Run Simulation" to pit 5 AI strategies against each other' }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            Button,
+            {
+              onClick: runSimulation,
+              loading: isRunning,
+              "data-ocid": "simulator.start_button",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(CirclePlay, { size: 14 }),
+                " Start Simulation"
+              ]
+            }
+          )
+        ]
+      }
+    ),
+    isRunning && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900 py-20 space-y-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-8 h-8 rounded-full border-2 border-violet-500 border-t-transparent animate-spin" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-zinc-500 text-sm", children: [
+        "Running 5-agent simulation on ",
+        days,
+        " days of ",
+        symbol,
+        " data…"
+      ] })
+    ] }),
+    results && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "div",
+        {
+          className: "rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden",
+          "data-ocid": "simulator.leaderboard",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-3 border-b border-zinc-800 flex items-center gap-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Award, { size: 16, className: "text-yellow-400" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-semibold text-zinc-200", children: "Agent Leaderboard" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "ml-auto text-xs text-zinc-600", children: [
+                symbol,
+                " · ",
+                days,
+                "d · ",
+                fmtUSD(initialBalance),
+                " start"
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-xs", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "text-zinc-600 border-b border-zinc-800", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left py-2 px-4", children: "Rank" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left py-2 px-4", children: "Strategy" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-right py-2 px-4", children: "Final Balance" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-right py-2 px-4", children: "Return" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-right py-2 px-4", children: "Win Rate" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-right py-2 px-4", children: "Sharpe" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-right py-2 px-4", children: "Drawdown" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-right py-2 px-4", children: "Trades" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-right py-2 px-4", children: "Rejected" })
+              ] }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: results.map((r2, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "tr",
+                {
+                  tabIndex: 0,
+                  onClick: () => setSelectedAgent(
+                    selectedAgent === r2.agent.id ? null : r2.agent.id
+                  ),
+                  onKeyDown: (e3) => e3.key === "Enter" && setSelectedAgent(
+                    selectedAgent === r2.agent.id ? null : r2.agent.id
+                  ),
+                  className: `border-b border-zinc-800/40 cursor-pointer transition-colors ${selectedAgent === r2.agent.id ? "bg-violet-600/10" : "hover:bg-zinc-800/20"}`,
+                  "data-ocid": `simulator.leaderboard.item.${i + 1}`,
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2.5 px-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(RankBadge, { rank: i + 1 }) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-2.5 px-4", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "span",
+                          {
+                            className: "w-2.5 h-2.5 rounded-full shrink-0",
+                            style: {
+                              background: STRATEGY_COLORS[r2.agent.strategy]
+                            }
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold text-zinc-200", children: r2.agent.strategy })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-zinc-600 text-xs mt-0.5 pl-4.5", children: STRATEGY_DESC[r2.agent.strategy] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "text-right py-2.5 px-4 text-zinc-200 font-mono", children: fmtUSD(r2.agent.equity) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "td",
+                      {
+                        className: `text-right py-2.5 px-4 font-semibold ${pctColor(r2.totalReturn)}`,
+                        children: fmtPct(r2.totalReturn)
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "text-right py-2.5 px-4 text-zinc-300", children: [
+                      (r2.winRate * 100).toFixed(1),
+                      "%"
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "td",
+                      {
+                        className: `text-right py-2.5 px-4 ${r2.sharpeRatio >= 1 ? "text-emerald-400" : r2.sharpeRatio >= 0 ? "text-zinc-300" : "text-red-400"}`,
+                        children: r2.sharpeRatio.toFixed(2)
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "text-right py-2.5 px-4 text-red-400", children: fmtPct(-r2.maxDrawdown) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "text-right py-2.5 px-4 text-zinc-400", children: r2.totalTrades }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "text-right py-2.5 px-4 text-orange-400", children: r2.rejectedCount })
+                  ]
+                },
+                r2.agent.id
+              )) })
+            ] })
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          StatCard,
+          {
+            label: "Best Return",
+            value: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: pctColor(((_a3 = results[0]) == null ? void 0 : _a3.totalReturn) ?? 0), children: fmtPct(((_b3 = results[0]) == null ? void 0 : _b3.totalReturn) ?? 0) }),
+            sub: (_c2 = results[0]) == null ? void 0 : _c2.agent.strategy,
+            icon: /* @__PURE__ */ jsxRuntimeExports.jsx(TrendingUp, { size: 16 })
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          StatCard,
+          {
+            label: "Worst Return",
+            value: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "span",
+              {
+                className: pctColor(
+                  ((_d2 = results[results.length - 1]) == null ? void 0 : _d2.totalReturn) ?? 0
+                ),
+                children: fmtPct(((_e2 = results[results.length - 1]) == null ? void 0 : _e2.totalReturn) ?? 0)
+              }
+            ),
+            sub: (_f2 = results[results.length - 1]) == null ? void 0 : _f2.agent.strategy,
+            icon: /* @__PURE__ */ jsxRuntimeExports.jsx(TrendingDown, { size: 16 })
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          StatCard,
+          {
+            label: "Best Sharpe",
+            value: Math.max(...results.map((r2) => r2.sharpeRatio)).toFixed(2),
+            sub: results.reduce(
+              (a2, b2) => a2.sharpeRatio > b2.sharpeRatio ? a2 : b2
+            ).agent.strategy
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          StatCard,
+          {
+            label: "Lowest Drawdown",
+            value: fmtPct(-Math.min(...results.map((r2) => r2.maxDrawdown))),
+            sub: results.reduce(
+              (a2, b2) => a2.maxDrawdown < b2.maxDrawdown ? a2 : b2
+            ).agent.strategy
+          }
+        )
+      ] }),
+      equityChartData.length > 1 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "rounded-xl border border-zinc-800 bg-zinc-900 p-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-semibold text-zinc-200 mb-3", children: "Equity Curve Comparison" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveContainer, { width: "100%", height: 240, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(LineChart, { data: equityChartData, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CartesianGrid, { strokeDasharray: "3 3", stroke: "#27272a" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(XAxis, { dataKey: "t", hide: true }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            YAxis,
+            {
+              domain: ["auto", "auto"],
+              tick: { fill: "#71717a", fontSize: 10 },
+              tickFormatter: (v2) => fmtUSD(v2, 0)
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Tooltip,
+            {
+              contentStyle: {
+                background: "#18181b",
+                border: "1px solid #3f3f46",
+                borderRadius: 8,
+                fontSize: 10
+              },
+              formatter: (v2, name) => [fmtUSD(v2), name],
+              labelFormatter: (v2) => new Date(v2).toLocaleDateString()
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Legend,
+            {
+              formatter: (v2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "span",
+                {
+                  style: {
+                    color: STRATEGY_COLORS[v2] ?? "#a1a1aa",
+                    fontSize: 11
+                  },
+                  children: v2
+                }
+              )
+            }
+          ),
+          results.map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Line,
+            {
+              type: "monotone",
+              dataKey: r2.agent.strategy,
+              stroke: STRATEGY_COLORS[r2.agent.strategy],
+              strokeWidth: selectedAgent === r2.agent.id ? 2.5 : 1.5,
+              dot: false,
+              opacity: selectedAgent && selectedAgent !== r2.agent.id ? 0.35 : 1
+            },
+            r2.agent.strategy
+          ))
+        ] }) })
+      ] }),
+      selectedResult && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "div",
+        {
+          className: "rounded-xl border border-zinc-800 bg-zinc-900",
+          "data-ocid": "simulator.agent_detail",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-3 border-b border-zinc-800 flex items-center gap-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "span",
+                {
+                  className: "w-3 h-3 rounded-full",
+                  style: {
+                    background: STRATEGY_COLORS[selectedResult.agent.strategy]
+                  }
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-sm font-semibold text-zinc-200", children: [
+                selectedResult.agent.strategy,
+                " — Trade Log"
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "ml-auto flex items-center gap-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: () => setTradeTab("trades"),
+                    className: `px-2.5 py-1 text-xs rounded-lg font-medium transition-colors ${tradeTab === "trades" ? "bg-violet-600 text-white" : "bg-zinc-800 text-zinc-400 hover:text-zinc-200"}`,
+                    "data-ocid": "simulator.trade_log.tab",
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(Activity, { size: 10, className: "inline mr-1" }),
+                      "Trades (",
+                      activeTrades.length,
+                      ")"
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: () => setTradeTab("rejected"),
+                    className: `px-2.5 py-1 text-xs rounded-lg font-medium transition-colors ${tradeTab === "rejected" ? "bg-orange-600 text-white" : "bg-zinc-800 text-zinc-400 hover:text-zinc-200"}`,
+                    "data-ocid": "simulator.rejection_log.tab",
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(CircleX, { size: 10, className: "inline mr-1" }),
+                      "Rejected (",
+                      rejectedTrades.length,
+                      ")"
+                    ]
+                  }
+                )
+              ] })
+            ] }),
+            tradeTab === "trades" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto", children: activeTrades.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "p",
+              {
+                className: "text-sm text-zinc-600 py-8 text-center",
+                "data-ocid": "simulator.trade_log.empty_state",
+                children: "No trades executed by this agent"
+              }
+            ) : /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-xs", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "text-zinc-600 border-b border-zinc-800", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left py-2 px-3", children: "#" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left py-2 px-3", children: "Action" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-right py-2 px-3", children: "Entry" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-right py-2 px-3", children: "Exit" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-right py-2 px-3", children: "PnL" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-right py-2 px-3", children: "Conf" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2 px-3" })
+              ] }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: activeTrades.map((t2, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(TradeRow, { trade: t2, idx: i }, t2.id)) })
+            ] }) }),
+            tradeTab === "rejected" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto", children: rejectedTrades.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "p",
+              {
+                className: "text-sm text-zinc-600 py-8 text-center",
+                "data-ocid": "simulator.rejection_log.empty_state",
+                children: "No rejected trades — all signals were accepted"
+              }
+            ) : /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-xs", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "text-zinc-600 border-b border-zinc-800", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left py-2 px-3", children: "#" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left py-2 px-3", children: "Type" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-right py-2 px-3", children: "Price" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-right py-2 px-3", children: "Confidence" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left py-2 px-3", children: "Reason" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left py-2 px-3", children: "Time" })
+              ] }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: rejectedTrades.map((t2, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "tr",
+                {
+                  className: "border-b border-zinc-800/40 hover:bg-zinc-800/20",
+                  "data-ocid": `simulator.rejection_log.item.${i + 1}`,
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3 text-zinc-500", children: i + 1 }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "px-1.5 py-0.5 rounded bg-zinc-700 text-zinc-400 text-xs", children: "REJECTED" }) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3 text-right text-zinc-300 font-mono", children: fmtUSD(t2.entryPrice) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-2 px-3 text-right text-zinc-400", children: [
+                      t2.confidence.toFixed(0),
+                      "%"
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3 text-red-400", children: t2.rejectReason ?? "—" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3 text-zinc-600", children: new Date(t2.entryTime).toLocaleDateString() })
+                  ]
+                },
+                t2.id
+              )) })
+            ] }) })
+          ]
+        }
+      )
+    ] })
+  ] });
+}
 function TradingPage() {
   const { data: portfolio, isLoading } = usePortfolio();
   const { data: positions } = useOpenPositions();
@@ -58145,6 +59242,8 @@ function TrainingPage() {
 }
 function PageContent({ page }) {
   switch (page) {
+    case "simulator":
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(SimulatorPage, {});
     case "dashboard":
       return /* @__PURE__ */ jsxRuntimeExports.jsx(DashboardPage, {});
     case "market":
@@ -58166,7 +59265,7 @@ function PageContent({ page }) {
   }
 }
 function App() {
-  const [page, setPage] = reactExports.useState("dashboard");
+  const [page, setPage] = reactExports.useState("simulator");
   const { data: risk } = useRiskStatus();
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex min-h-screen bg-zinc-950 text-zinc-100", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Sidebar, { page, onNavigate: setPage, paused: risk == null ? void 0 : risk.isPaused }),

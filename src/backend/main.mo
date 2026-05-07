@@ -22,6 +22,7 @@ import BotTypes "types/bot";
 import EquityTypes "types/equity";
 import BotApi "mixins/bot-api";
 import Map "mo:core/Map";
+import Timer "mo:core/Timer";
 
 
 
@@ -132,6 +133,12 @@ actor {
     });
   };
 
+  // --- Bot Timer State ---
+  let botTimerState = {
+    var marketTimerId  : ?Timer.TimerId = null;
+    var decisionTimerId : ?Timer.TimerId = null;
+  };
+
   // --- Bot Lifecycle State ---
   let botConfig = {
     var value : BotTypes.BotConfig = {
@@ -183,6 +190,7 @@ actor {
   include BotApi(
     accessControlState,
     botConfig, botState,
+    botTimerState,
     trades, portfolio, marketSnapshots,
     decisionLogs, latestCondition, aiState,
     trainingState, noTradeDecisions,
